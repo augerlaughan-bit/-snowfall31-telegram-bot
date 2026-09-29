@@ -12,33 +12,45 @@ logger = logging.getLogger(__name__)
 
 # Fonction de démarrage /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # Création du clavier avec la Mini App intégrée
+    # Organisation des boutons en plusieurs lignes comme sur ton modèle
     keyboard = [
-        [InlineKeyboardButton(text="🛍️ Ouvrir la Boutique Snowfall 31", web_app=WebAppInfo(url="https://augerlaughan-bit.github.io/-snowfall31-telegram-bot/"))],
-        [InlineKeyboardButton(text="📢 Rejoindre le Canal", url="https://t.me/ton_canal")],
-        [InlineKeyboardButton(text="💬 Prise de Contact", url="https://t.me/ton_compte")]
+        [InlineKeyboardButton(text="📱 Ouvrir la mini-app", web_app=WebAppInfo(url="https://augerlaughan-bit.github.io/-snowfall31-telegram-bot/"))],
+        [
+            InlineKeyboardButton(text="💬 Canal", url="https://t.me/ton_canal"),
+            InlineKeyboardButton(text="📞 Contacter", url="https://t.me/ton_compte")
+        ],
+        [InlineKeyboardButton(text="🔵 Contact Signal", url="https://signal.me/#...")],
+        [InlineKeyboardButton(text="🛍️📸 Avis / Retour", url="https://t.me/ton_canal")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    # Message de bienvenue avec les boutons
-    await update.message.reply_text(
-        "Bienvenue sur le bot de Snowfall 31 !",
-        reply_markup=reply_markup
+    # Texte de bienvenue structuré avec des emojis
+    texte_bienvenue = (
+        "Bienvenue sur notre bot 👋\n"
+        "Vous trouverez ici 👇\n\n"
+        "- Image 📸\n"
+        "- Menu Mini App 🤖\n"
+        "- Lien de Contact ☎️📱\n"
+        "- Actu et Promo 🎁"
     )
 
+    # Envoi de la nouvelle image IMG_0480.jpeg avec le texte et les boutons
+    with open("IMG_0480.jpeg", "rb") as photo_file:
+        await update.message.reply_photo(
+            photo=photo_file,
+            caption=texte_bienvenue,
+            reply_markup=reply_markup
+        )
+
 def main() -> None:
-    # Récupération automatique du token du bot
     token = os.getenv("TELEGRAM_TOKEN")
     if not token:
         logger.error("Aucun token Telegram trouvé.")
         return
 
     application = ApplicationBuilder().token(token).build()
-
-    # Enregistrement de la commande /start
     application.add_handler(CommandHandler("start", start))
 
-    # Lancement du bot
     logger.info("Démarrage du bot...")
     application.run_polling()
 
