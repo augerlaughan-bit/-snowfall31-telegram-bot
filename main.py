@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 # Fonction de démarrage /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # Organisation des boutons en plusieurs lignes comme sur ton modèle
+    # Organisation de tous les boutons en plusieurs lignes
     keyboard = [
         [InlineKeyboardButton(text="📱 Ouvrir la mini-app", web_app=WebAppInfo(url="https://augerlaughan-bit.github.io/-snowfall31-telegram-bot/"))],
         [
@@ -34,7 +34,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "- Actu et Promo 🎁"
     )
 
-    # Envoi de la nouvelle image IMG_0480.jpeg avec le texte et les boutons
+    # Envoi de la photo IMG_0480.jpeg avec le texte et les boutons
     with open("IMG_0480.jpeg", "rb") as photo_file:
         await update.message.reply_photo(
             photo=photo_file,
@@ -43,14 +43,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 def main() -> None:
+    # Récupération automatique du token du bot
     token = os.getenv("TELEGRAM_TOKEN")
     if not token:
         logger.error("Aucun token Telegram trouvé.")
         return
 
     application = ApplicationBuilder().token(token).build()
+
+    # Enregistrement de la commande /start
     application.add_handler(CommandHandler("start", start))
 
+    # Lancement du bot
     logger.info("Démarrage du bot...")
     application.run_polling()
 
