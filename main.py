@@ -8,7 +8,7 @@ TOKEN = os.getenv("TELEGRAM_TOKEN")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
   # 1. L'image de présentation (tu peux remplacer le lien par l'URL de ton image)
-  photo_url = "https://images.unsplash.com/photo-1513104890138-7c749659a591"  # Exemple d'image
+  photo_url = "https://i.ibb.co/R2s5fJd/image-10.png](https://i.ibb.co/R2s5fJd/image-10.png"  # Exemple d'image
 
   # 2. Le texte de bienvenue
   caption = (
