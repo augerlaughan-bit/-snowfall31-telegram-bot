@@ -24,8 +24,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
   keyboard = [
       [InlineKeyboardButton("📱 Ouvrir la mini-app", url="https://ton-lien.com")],
       [
-          InlineKeyboardButton("💬 Canal", url="https://t.me/ton_canal"),
-          InlineKeyboardButton("📞 Contacter", url="https://t.me/ton_pseudo"),
+          InlineKeyboardButton("💬 Canal", url="https://t.me/+Ar5IdGn5wckzYjA0"),
+          InlineKeyboardButton("📞 Contacter", url="https://t.me/snnow31"),
       ],
       [
           InlineKeyboardButton(
