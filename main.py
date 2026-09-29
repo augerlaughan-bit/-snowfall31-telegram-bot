@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 # Fonction de démarrage /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # Création du clavier avec tous les boutons
+    # Création du clavier avec la Mini App intégrée
     keyboard = [
         [InlineKeyboardButton(text="🛍️ Ouvrir la Boutique Snowfall 31", web_app=WebAppInfo(url="https://augerlaughan-bit.github.io/-snowfall31-telegram-bot/"))],
         [InlineKeyboardButton(text="📢 Rejoindre le Canal", url="https://t.me/ton_canal")],
