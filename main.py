@@ -1,60 +1,45 @@
 import os
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+import logging
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-# Récupération du token configuré dans tes variables d'environnement Railway
-TOKEN = os.getenv("TELEGRAM_TOKEN")
+# Configuration des logs
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
+# Fonction de démarrage /start
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Création du clavier avec tous les boutons demandés
+    keyboard = [
+        [InlineKeyboardButton("📱 Ouvrir la Mini App", url="https://augerlaughan-bit.github.io/-snowfall31-telegram-bot/")],
+        [InlineKeyboardButton("📢 Rejoindre le Canal", url="https://t.me/+Ar5IdGn5wckzYjA0")],
+        [InlineKeyboardButton("💬 Prise de contact", url="https://t.me/snnow31")]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    # Message de bienvenue avec les boutons
+    await update.message.reply_text(
+        "Bienvenue sur le bot de Snowfall31 ! Choisis une option ci-dessous :",
+        reply_markup=reply_markup
+    )
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-  # 1. L'image de présentation (tu peux remplacer le lien par l'URL de ton image)
-  photo_url = "IMG_0347.PNG"  # Exemple d'image
+def main() -> None:
+    # Récupération automatique du token Railway
+    token = os.getenv("TELEGRAM_TOKEN")
+    if not token:
+        logger.error("Aucun token Telegram trouvé dans les variables d'environnement !")
+        return
 
-  # 2. Le texte de bienvenue
-  caption = (
-      "Bienvenue sur notre bot 👋\n"
-      "Vous trouverez ici 👇\n"
-      "- Image 📸\n"
-      "- Menu Mini App 🤖\n"
-      "- Lien de Contact ☎️📲\n"
-      "- Actu et Promo 🎁"
-  )
+    application = ApplicationBuilder().token(token).build()
 
-  # 3. Les boutons interactifs (Inline Keyboards)
-  keyboard = [
-      InlineKeyboardButton("📱 Ouvrir la Mini App", url="https://augerlaughan-bit.github.io/-snowfall31-telegram-bot/")
+    # Enregistrement de la commande /start
+    application.add_handler(CommandHandler("start", start))
 
-⁠")],
-      [
-          InlineKeyboardButton("💬 Canal", url="https://t.me/+Ar5IdGn5wckzYjA0"),
-          InlineKeyboardButton("📞 Contacter", url="https://t.me/snnow31"),
-      ],
-      [
-          InlineKeyboardButton(
-              "🔵 Contact Signal", url="https://signal.me/#..."
-          )
-      ],
-      [
-          InlineKeyboardButton(
-              "🛍️📸 Avis / Retour", url="https://t.me/ton_lien_avis"
-          )
-      ],
-  ]
-  reply_markup = InlineKeyboardMarkup(keyboard)
-
-  # Envoi de la photo avec le texte et les boutons
-  await update.message.reply_photo(
-      photo=photo_url, caption=caption, reply_markup=reply_markup
-  )
-
-
-def main():
-  application = ApplicationBuilder().token(TOKEN).build()
-  application.add_handler(CommandHandler("start", start))
-
-  print("Le bot est démarré...")
-  application.run_polling()
-
+    # Lancement du bot
+    logger.info("Le bot démarre...")
+    application.run_polling()
 
 if __name__ == "__main__":
-  main()
+    main()
