@@ -12,21 +12,20 @@ logger = logging.getLogger(__name__)
 
 # Fonction de démarrage /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # Organisation de tous les boutons en plusieurs lignes
+    # Organisation de tes boutons personnalisés
     keyboard = [
         [InlineKeyboardButton(text="📱 Ouvrir la mini-app", web_app=WebAppInfo(url="https://augerlaughan-bit.github.io/-snowfall31-telegram-bot/"))],
         [
-            InlineKeyboardButton(text="💬 Canal", url="https://t.me/ton_canal"),
-            InlineKeyboardButton(text="📞 Contacter", url="https://t.me/ton_compte")
+            InlineKeyboardButton(text="💬 Canal", url="https://t.me/+IvnpxHvvDv85NmI0"),
+            InlineKeyboardButton(text="📞 Contacter", url="https://t.me/snnow31")
         ],
-        [InlineKeyboardButton(text="🔵 Contact Signal", url="https://signal.me/#...")],
-        [InlineKeyboardButton(text="🛍️📸 Avis / Retour", url="https://t.me/ton_canal")]
+        [InlineKeyboardButton(text="🛍️️📸 Avis / Retour", url="https://t.me/ton_vrai_canal")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     # Texte de bienvenue structuré avec des emojis
     texte_bienvenue = (
-        "Bienvenue sur notre bot 👋\n"
+        "Bienvenue sur notre bot snowfall31 👋\n"
         "Vous trouverez ici 👇\n\n"
         "- Image 📸\n"
         "- Menu Mini App 🤖\n"
