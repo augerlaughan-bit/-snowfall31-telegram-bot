@@ -3,108 +3,338 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snowfall31 - Catalogue</title>
+    <title>SNOWFALL31 Mini-App</title>
     <style>
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
-            --accent-color: #f59e0b;
-            --text-color: #f8fafc;
-            --text-muted: #94a3b8;
+            --accent-color: #3b82f6;
+            --accent-red: #ef4444;
+            --text-color: #ffffff;
+            --text-secondary: #94a3b8;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0;
-            padding: 16px;
+            padding-bottom: 90px;
         }
         header {
-            text-align: center;
-            margin-bottom: 24px;
+            background: linear-gradient(135deg, #1d4ed8, #0284c7);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        header h1 {
-            color: var(--accent-color);
-            margin: 0 0 8px 0;
-            font-size: 24px;
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        header p {
-            color: var(--text-muted);
-            margin: 0;
-            font-size: 14px;
+        .logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+        }
+        h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .cart-btn {
+            background: var(--accent-red);
+            border: none;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+        }
+        .filters {
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            overflow-x: auto;
+        }
+        .filter-select {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid #334155;
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            outline: none;
+            flex: 1;
+            white-space: nowrap;
         }
         .container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            max-width: 600px;
-            margin: 0 auto;
+            padding: 0 15px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
         }
         .card {
             background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border-radius: 16px;
+            overflow: hidden;
             border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .card h3 {
-            margin: 0 0 8px 0;
-            font-size: 18px;
+        .card-header {
+            position: relative;
+            height: 120px;
+            background: #000;
         }
-        .card p {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin: 0 0 12px 0;
+        .card-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
-        .footer-price {
+        .badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--accent-red);
+            color: white;
+            padding: 3px 8px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+        .card-body {
+            padding: 12px;
+            flex-grow: 1;
+        }
+        .product-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .product-desc {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        .product-price {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #60a5fa;
+            margin-bottom: 10px;
+        }
+        .btn-details {
+            width: 100%;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+        }
+        /* Modal Panier */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 200;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            width: 100%;
+            max-height: 80vh;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        .price {
+            font-size: 1.1rem;
             font-weight: bold;
-            color: var(--accent-color);
-            font-size: 16px;
         }
-        .btn {
-            background-color: var(--accent-color);
-            color: #000;
-            padding: 8px 16px;
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .cart-items {
+            overflow-y: auto;
+            max-height: 40vh;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            background: #0f172a;
+            padding: 10px;
             border-radius: 8px;
-            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .checkout-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>SNOWFALL31</h1>
-        <p>Catalogue Officiel & Tarifs</p>
+        <div class="header-brand">
+            <img src="https://augerlaughan-bit.github.io/-snowfall31-telegram-bot/logo.png" alt="Logo" class="logo" onerror="this.src='https://i.ibb.co/6PXZJ3g/default-logo.png'">
+            <h1>SNOWFALL31</h1>
+        </div>
+        <button class="cart-btn" onclick="toggleCart()">
+            🛒 <span id="cart-count">0</span>
+        </button>
     </header>
 
-    <div class="container">
-        <!-- Article 1 -->
-        <div class="card">
-            <h3>Nom du Produit / Service 1</h3>
-            <p>Description rapide de ton produit ou de ta prestation de qualité supérieure sur Toulouse.</p>
-            <div class="footer-price">
-                <span class="price">XX €</span>
-                <a href="https://t.me/TON_PSEUDO" class="btn">Commander</a>
-            </div>
-        </div>
+    <div class="filters">
+        <select class="filter-select">
+            <option>Toutes les catégories</option>
+            <option>Fleurs 🌿</option>
+            <option>Résines 🍯</option>
+            <option>Extractions 💎</option>
+        </select>
+        <select class="filter-select">
+            <option>Toutes les farms</option>
+            <option>Californie 🇺🇸</option>
+            <option>Espagne 🇪🇸</option>
+            <option>Local 🇫🇷</option>
+        </select>
+    </div>
 
-        <!-- Article 2 -->
-        <div class="card">
-            <h3>Nom du Produit / Service 2</h3>
-            <p>Description rapide de ton deuxième produit ou formule disponible.</p>
-            <div class="footer-price">
-                <span class="price">XX €</span>
-                <a href="https://t.me/TON_PSEUDO" class="btn">Commander</a>
+    <div class="container" id="product-list">
+        <!-- Les produits seront chargés dynamiquement ici -->
+    </div>
+
+    <!-- Modal Panier -->
+    <div class="modal" id="cart-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Votre Panier 🛒</span>
+                <button class="close-modal" onclick="toggleCart()">✕</button>
             </div>
+            <div class="cart-items" id="cart-items-container">
+                <p style="color: var(--text-secondary); text-align: center;">Votre panier est vide</p>
+            </div>
+            <button class="checkout-btn" onclick="sendOrder()">Commander sur Telegram 🚀</button>
         </div>
     </div>
 
+    <script>
+        const products = [
+            { id: 1, name: "Amnesia Haze", category: "Fleurs 🌿", farm: "Espagne 🇪🇸", price: "10g / 90€", desc: "Top qualité, effets puissants." },
+            { id: 2, name: "Static Dry 120u", category: "Résines 🍯", farm: "Californie 🇺🇸", price: "5g / 70€", desc: "Texture ultra grasse, arômes intenses." },
+            { id: 3, name: "Mousseux Filtre", category: "Résines 🍯", farm: "Local 🇫🇷", price: "25g / 100€", desc: "Classique incontournable, bon rapport qualité/prix." },
+            { id: 4, name: "Zkittlez Cali", category: "Fleurs 🌿", farm: "Californie 🇺🇸", price: "3.5g / 60€", desc: "Import direct scellé, terps exceptionnelles." }
+        ];
+
+        let cart = [];
+
+        function renderProducts() {
+            const container = document.getElementById('product-list');
+            container.innerHTML = products.map(p => `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="badge">${p.farm.split(' ')[0]}</div>
+                        <img src="https://images.unsplash.com/photo-1527661591475-527312dd65f5?w=300" alt="${p.name}">
+                    </div>
+                    <div class="card-body">
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-desc">${p.desc}</div>
+                        <div class="product-price">${p.price}</div>
+                        <button class="btn-details" onclick="addToCart(${p.id})">Ajouter</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            cart.push(product);
+            document.getElementById('cart-count').innerText = cart.length;
+            alert(product.name + " ajouté au panier !");
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+            
+            const container = document.getElementById('cart-items-container');
+            if(cart.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">Votre panier est vide</p>`;
+            } else {
+                container.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item">
+                        <span>${item.name} (${item.price})</span>
+                        <span style="color: var(--accent-red); cursor: pointer;" onclick="removeFromCart(${index})">Supprimer</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            document.getElementById('cart-count').innerText = cart.length;
+            toggleCart();
+            toggleCart();
+        }
+
+        function sendOrder() {
+            if(cart.length === 0) {
+                alert("Votre panier est vide !");
+                return;
+            }
+            let text = "Bonjour, je souhaite commander :%0A";
+            cart.forEach(item => {
+                text += `- ${item.name} (${item.price})%0A`;
+            });
+            window.location.href = "https://t.me/snnow31?text=" + text;
+        }
+
+        renderProducts();
+    </script>
 </body>
 </html>
