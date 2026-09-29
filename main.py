@@ -22,7 +22,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
   # 3. Les boutons interactifs (Inline Keyboards)
   keyboard = [
-      [InlineKeyboardButton("📱 Ouvrir la mini-app", url="https://ton-lien.com")],
+      [InlineKeyboardButton("📱 Ouvrir la mini-app", url="url="https://augerlaughan-bit.github.io/-snowfall31-telegram-bot/"
+⁠")],
       [
           InlineKeyboardButton("💬 Canal", url="https://t.me/+Ar5IdGn5wckzYjA0"),
           InlineKeyboardButton("📞 Contacter", url="https://t.me/snnow31"),
