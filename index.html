@@ -3,232 +3,408 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SNOWFALL 31 - Mini App</title>
+    <title>SNOWFALL 31 - Premium Shop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --border-color: #30363d;
-            --accent-blue: #38bdf8;
-            --accent-gold: #fbbf24;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
+            --bg: #090d16;
+            --card-bg: rgba(22, 27, 34, 0.7);
+            --border: rgba(56, 189, 248, 0.15);
+            --primary: #38bdf8;
+            --gold: #f59e0b;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --success: #10b981;
         }
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding: 12px;
-            padding-bottom: 90px;
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, var(--bg) 70%);
+            color: var(--text);
+            padding: 14px;
+            padding-bottom: 110px;
+            min-height: 100vh;
         }
-        /* Header */
-        .header {
+        /* Header style App native */
+        .hero {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px 16px;
             text-align: center;
-            padding: 16px 10px;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
             margin-bottom: 16px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .header h1 {
+        .hero h1 {
             font-size: 22px;
             font-weight: 800;
+            color: var(--primary);
             letter-spacing: 0.5px;
-            color: var(--accent-blue);
             margin-bottom: 4px;
         }
-        .header p {
+        .hero p {
             font-size: 13px;
-            color: var(--text-muted);
+            color: var(--muted);
+            margin-bottom: 12px;
         }
-        .status-badge {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 4px 12px;
-            background: rgba(16, 185, 129, 0.15);
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
             color: #34d399;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 12px;
             font-weight: 600;
-            border: 1px solid rgba(52, 211, 153, 0.3);
         }
-        /* Filtres / Onglets */
-        .categories {
+        .dot {
+            width: 7px;
+            height: 7px;
+            background-color: #34d399;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #34d399;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* Menu Filtres Glissants */
+        .filters {
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             margin-bottom: 16px;
             scrollbar-width: none;
         }
-        .categories::-webkit-scrollbar { display: none; }
-        .chip {
+        .filters::-webkit-scrollbar { display: none; }
+        .filter-btn {
             background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
+            border: 1px solid var(--border);
+            color: var(--muted);
             padding: 8px 16px;
-            border-radius: 20px;
+            border-radius: 14px;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 600;
             white-space: nowrap;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
         }
-        .chip.active {
-            background: var(--accent-blue);
+        .filter-btn.active {
+            background: var(--primary);
             color: #000;
-            border-color: var(--accent-blue);
-            font-weight: 700;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
         }
-        /* Liste des produits */
-        .section-title {
-            font-size: 15px;
+
+        /* Titres de sections */
+        .category-title {
+            font-size: 14px;
             font-weight: 700;
-            color: var(--accent-gold);
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
+            color: var(--gold);
+            margin: 18px 0 10px 4px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
         }
+
+        /* Cartes Produits Modernes */
         .product-card {
             background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
             padding: 14px;
             margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.1s;
         }
         .product-info h3 {
             font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 4px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 3px;
         }
-        .product-info p {
+        .product-info .desc {
             font-size: 12px;
-            color: var(--text-muted);
+            color: var(--muted);
             margin-bottom: 6px;
         }
-        .price {
+        .product-info .price {
             font-size: 13px;
-            font-weight: 700;
-            color: var(--accent-gold);
+            font-weight: 800;
+            color: var(--gold);
+        }
+
+        /* Contrôles d'ajout / quantité */
+        .action-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .btn-add {
-            background: var(--accent-blue);
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
             color: #000;
             border: none;
             padding: 8px 16px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 700;
             font-size: 13px;
             cursor: pointer;
+            box-shadow: 0 4px 10px rgba(56,189,248,0.2);
         }
-        /* Barre de validation fixe en bas */
-        .footer-bar {
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .qty-btn {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            padding: 6px 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .qty-val {
+            font-size: 13px;
+            font-weight: 700;
+            padding: 0 4px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Barre Panier Flottante en bas */
+        .cart-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(13, 17, 23, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid var(--border-color);
-            padding: 12px 16px;
+            background: rgba(13, 17, 23, 0.92);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border);
+            padding: 14px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
+            transform: translateY(120%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .cart-summary {
+        .cart-bar.visible {
+            transform: translateY(0);
+        }
+        .cart-info {
             font-size: 13px;
-            color: var(--text-muted);
+            color: var(--muted);
         }
-        .cart-summary span {
-            color: var(--text-main);
-            font-weight: bold;
+        .cart-info b {
+            color: var(--text);
+            font-size: 14px;
         }
         .btn-checkout {
-            background: #10b981;
+            background: linear-gradient(135deg, #10b981, #059669);
             color: #fff;
             border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
+            padding: 10px 22px;
+            border-radius: 14px;
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
+    <div class="hero">
         <h1>❄️ SNOWFALL 31 🏔️</h1>
         <p>Service Premium • Toulouse & Alentours</p>
-        <div class="status-badge">🟢 OUVERT • 7J/7 (10h - 03h)</div>
-    </div>
-
-    <div class="categories">
-        <div class="chip active">Tout voir</div>
-        <div class="chip">🍫 Hash</div>
-        <div class="chip">🌿 Weed</div>
-        <div class="chip">🥳 Festif</div>
-    </div>
-
-    <div class="section-title">🍫 HASH & EXTRACTIONS</div>
-
-    <div class="product-card">
-        <div class="product-info">
-            <h3>Jaune Mousseux 🧽</h3>
-            <p>Doux, classique et efficace.</p>
-            <div class="price">À partir de 10€/g</div>
+        <div class="badge-status">
+            <div class="dot"></div>
+            OUVERT • 7J/7 (10h - 03h)
         </div>
-        <button class="btn-add" onclick="addItem('Jaune Mousseux')">Ajouter</button>
     </div>
 
-    <div class="product-card">
-        <div class="product-info">
-            <h3>73U 🇲🇦</h3>
-            <p>Filtration de qualité supérieure.</p>
-            <div class="price">À partir de 15€/g</div>
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterCat('all')">🔥 Tout voir</button>
+        <button class="filter-btn" onclick="filterCat('hash')">🍫 Hash</button>
+        <button class="filter-btn" onclick="filterCat('weed')">🌿 Weed</button>
+        <button class="filter-btn" onclick="filterCat('festif')">🥳 Festif</button>
+    </div>
+
+    <div id="catalog">
+        <div class="category-title">🍫 HASH & EXTRACTIONS</div>
+        
+        <div class="product-card" data-cat="hash">
+            <div class="product-info">
+                <h3>Jaune Mousseux 🧽</h3>
+                <div class="desc">Doux, classique et efficace.</div>
+                <div class="price">10€ / gramme</div>
+            </div>
+            <div id="prod-1" class="action-box">
+                <button class="btn-add" onclick="updateQty('Jaune Mousseux', 1, 10)">Ajouter</button>
+            </div>
         </div>
-        <button class="btn-add" onclick="addItem('73U')">Ajouter</button>
-    </div>
 
-    <div class="product-card">
-        <div class="product-info">
-            <h3>Fresh Frozen 🧊</h3>
-            <p>Extraction pure de plantes fraîches.</p>
-            <div class="price">À partir de 20€/g</div>
+        <div class="product-card" data-cat="hash">
+            <div class="product-info">
+                <h3>73U 🇲🇦</h3>
+                <div class="desc">Filtration de qualité supérieure.</div>
+                <div class="price">15€ / gramme</div>
+            </div>
+            <div id="prod-2" class="action-box">
+                <button class="btn-add" onclick="updateQty('73U', 1, 15)">Ajouter</button>
+            </div>
         </div>
-        <button class="btn-add" onclick="addItem('Fresh Frozen')">Ajouter</button>
+
+        <div class="product-card" data-cat="hash">
+            <div class="product-info">
+                <h3>Fresh Frozen 🧊</h3>
+                <div class="desc">Extraction pure de plantes fraîches.</div>
+                <div class="price">20€ / gramme</div>
+            </div>
+            <div id="prod-3" class="action-box">
+                <button class="btn-add" onclick="updateQty('Fresh Frozen', 1, 20)">Ajouter</button>
+            </div>
+        </div>
+
+        <div class="category-title">🌿 WEED & CALI</div>
+        
+        <div class="product-card" data-cat="weed">
+            <div class="product-info">
+                <h3>Anonymuz Farm ⭐</h3>
+                <div class="desc">Exclusivité et puissance maximale.</div>
+                <div class="price">25€ / gramme</div>
+            </div>
+            <div id="prod-4" class="action-box">
+                <button class="btn-add" onclick="updateQty('Anonymuz Farm', 1, 25)">Ajouter</button>
+            </div>
+        </div>
     </div>
 
-    <div class="footer-bar">
-        <div class="cart-summary">Sélection : <span id="count">0 article</span></div>
-        <button class="btn-checkout" onclick="checkout()">Commander</button>
+    <!-- Panier fixe -->
+    <div id="cartBar" class="cart-bar">
+        <div class="cart-info">
+            Total : <b id="cartTotal">0 €</b> <span id="cartCount" style="color:var(--muted); font-size:12px;">(0 article)</span>
+        </div>
+        <button class="btn-checkout" onclick="sendOrder()">Valider la commande 🚀</button>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        let cartCount = 0;
-        function addItem(name) {
-            cartCount++;
-            document.getElementById('count').innerText = cartCount + ' article(s)';
-            tg.HapticFeedback.impactOccurred('medium');
+        let cart = {};
+
+        function updateQty(name, delta, price) {
+            if (!cart[name]) {
+                cart[name] = { qty: 0, price: price };
+            }
+            cart[name].qty += delta;
+            if (cart[name].qty <= 0) {
+                delete cart[name];
+            }
+            
+            renderCart();
+            updateUIControls(name);
+            tg.HapticFeedback.impactOccurred('light');
         }
 
-        function checkout() {
-            if(cartCount === 0) {
-                alert("Veuillez sélectionner au moins un article.");
-                return;
+        function updateUIControls(name) {
+            // Mapping simple pour retrouver l'élément visuel
+            let map = {
+                'Jaune Mousseux': 'prod-1',
+                '73U': 'prod-2',
+                'Fresh Frozen': 'prod-3',
+                'Anonymuz Farm': 'prod-4'
+            };
+            let boxId = map[name];
+            let box = document.getElementById(boxId);
+            let item = cart[name];
+
+            if (!item || item.qty === 0) {
+                box.innerHTML = `<button class="btn-add" onclick="updateQty('${name}', 1, ${getItemPrice(name)})">Ajouter</button>`;
+            } else {
+                box.innerHTML = `
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="updateQty('${name}', -1, ${item.price})">-</button>
+                        <span class="qty-val">${item.qty}</span>
+                        <button class="qty-btn" onclick="updateQty('${name}', 1, ${item.price})">+</button>
+                    </div>
+                `;
             }
-            tg.sendData(JSON.stringify({action: "order", items: cartCount}));
+        }
+
+        function getItemPrice(name) {
+            if(name === 'Jaune Mousseux') return 10;
+            if(name === '73U') return 15;
+            if(name === 'Fresh Frozen') return 20;
+            if(name === 'Anonymuz Farm') return 25;
+            return 10;
+        }
+
+        function renderCart() {
+            let totalItems = 0;
+            let totalPrice = 0;
+
+            for (let key in cart) {
+                totalItems += cart[key].qty;
+                totalPrice += cart[key].qty * cart[key].price;
+            }
+
+            document.getElementById('cartCount').innerText = `(${totalItems} article${totalItems > 1 ? 's' : ''})`;
+            document.getElementById('cartTotal').innerText = totalPrice + ' €';
+
+            let bar = document.getElementById('cartBar');
+            if (totalItems > 0) {
+                bar.classList.add('visible');
+            } else {
+                bar.classList.remove('visible');
+            }
+        }
+
+        function filterCat(cat) {
+            // Gestion des boutons filtres
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filtrage des cartes
+            let cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            tg.HapticFeedback.selectionChanged();
+        }
+
+        function sendOrder() {
+            let orderDetails = {
+                action: "new_order",
+                items: cart,
+                total: document.getElementById('cartTotal').innerText
+            };
+            tg.sendData(JSON.stringify(orderDetails));
         }
     </script>
 </body>
