@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SNOWFALL 31 - Catalogue Officiel</title>
+    <title>SNOWFALL 31 - Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --bg: #090d16;
-            --card-bg: rgba(22, 27, 34, 0.75);
-            --border: rgba(56, 189, 248, 0.15);
+            --card-bg: #131b2e;
+            --border: rgba(56, 189, 248, 0.2);
             --primary: #38bdf8;
             --gold: #f59e0b;
             --text: #f8fafc;
             --muted: #94a3b8;
-            --success: #10b981;
+            --accent-red: #ef4444;
         }
         * {
             box-sizing: border-box;
@@ -25,357 +25,334 @@
         }
         body {
             background-color: var(--bg);
-            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, var(--bg) 80%);
             color: var(--text);
-            padding: 14px;
-            padding-bottom: 120px;
+            padding: 12px;
+            padding-bottom: 90px;
             min-height: 100vh;
         }
-        .hero {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+
+        /* Top Header avec Logo */
+        .top-header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 18px 16px;
-            text-align: center;
-            margin-bottom: 16px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 16px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
-        .hero h1 {
-            font-size: 21px;
+        .logo-container {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #000;
+            font-size: 18px;
+            border: 2px solid var(--gold);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .header-title h1 {
+            font-size: 17px;
             font-weight: 800;
             color: var(--primary);
             letter-spacing: 0.5px;
-            margin-bottom: 4px;
         }
-        .hero p {
-            font-size: 12px;
-            color: var(--muted);
-            margin-bottom: 10px;
-        }
-        .badge-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(16, 185, 129, 0.12);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #34d399;
-            padding: 4px 12px;
-            border-radius: 30px;
+        .header-title p {
             font-size: 11px;
-            font-weight: 600;
-        }
-        .dot {
-            width: 6px;
-            height: 6px;
-            background-color: #34d399;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #34d399;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.8; }
+            color: var(--muted);
         }
 
-        .category-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--gold);
-            margin: 20px 0 10px 4px;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
+        /* Vues des onglets */
+        .view-section {
+            display: none;
+        }
+        .view-section.active {
+            display: block;
         }
 
+        /* Grille de produits en 2 colonnes */
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
         .product-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 14px;
-            margin-bottom: 12px;
+            border-radius: 14px;
+            overflow: hidden;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
         }
-        .product-info {
-            flex-grow: 1;
-            padding-right: 10px;
-        }
-        .product-info h3 {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 2px;
-        }
-        .product-info .desc {
-            font-size: 11px;
-            color: var(--muted);
-            margin-bottom: 4px;
-        }
-        .product-info .price {
-            font-size: 12px;
-            font-weight: 800;
-            color: var(--gold);
-        }
-
-        .action-box {
+        .product-img {
+            width: 100%;
+            height: 110px;
+            background: #1e293b;
+            position: relative;
             display: flex;
             align-items: center;
-            min-width: 85px;
-            justify-content: flex-end;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 11px;
         }
-        .btn-add {
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .badge-festive {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(239, 68, 68, 0.85);
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            backdrop-filter: blur(4px);
+        }
+        .product-details {
+            padding: 10px;
+        }
+        .product-details h3 {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            color: var(--text);
+        }
+        .product-details p {
+            font-size: 10px;
+            color: var(--muted);
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        .btn-details {
+            width: 100%;
             background: linear-gradient(135deg, #38bdf8, #0284c7);
             color: #000;
             border: none;
-            padding: 7px 14px;
-            border-radius: 10px;
+            padding: 7px;
+            border-radius: 8px;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(56,189,248,0.2);
-        }
-        .qty-controls {
-            display: flex;
-            align-items: center;
-            background: rgba(255,255,255,0.08);
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-        }
-        .qty-btn {
-            background: transparent;
-            border: none;
-            color: var(--text);
-            padding: 5px 10px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .qty-val {
-            font-size: 12px;
-            font-weight: 700;
-            padding: 0 2px;
-            min-width: 18px;
-            text-align: center;
         }
 
-        .cart-bar {
+        /* Pages Infos / Liens / Contact */
+        .content-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .content-card h2 {
+            font-size: 15px;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .content-card p {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+
+        /* Barre de Navigation Fixe en Bas (Style iOS) */
+        .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background: rgba(13, 17, 23, 0.95);
-            backdrop-filter: blur(16px);
+            backdrop-filter: blur(15px);
             border-top: 1px solid var(--border);
-            padding: 12px 16px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
-            transform: translateY(120%);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 100;
+            justify-content: space-around;
+            padding: 8px 4px;
+            z-index: 1000;
         }
-        .cart-bar.visible {
-            transform: translateY(0);
-        }
-        .cart-info {
-            font-size: 12px;
-            color: var(--muted);
-        }
-        .cart-info b {
-            color: var(--text);
-            font-size: 13px;
-        }
-        .btn-checkout {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: #fff;
+        .nav-item {
+            background: none;
             border: none;
-            padding: 9px 18px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 13px;
+            color: var(--muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            font-size: 10px;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            flex: 1;
+            padding: 4px 0;
+            transition: 0.2s;
+        }
+        .nav-item span.icon {
+            font-size: 18px;
+        }
+        .nav-item.active {
+            color: var(--primary);
         }
     </style>
 </head>
 <body>
 
-    <div class="hero">
-        <h1>❄️ SNOWFALL 31 🏔️</h1>
-        <p>Service Premium • Toulouse & Alentours</p>
-        <div class="badge-status">
-            <div class="dot"></div>
-            OUVERT • 7J/7 (10h - 03h)
+    <!-- Header Supérieur avec Logo -->
+    <div class="top-header">
+        <div class="logo-container">
+            <!-- Remplace par le lien de ton logo si tu en as un, sinon initiales -->
+            ❄️
+        </div>
+        <div class="header-title">
+            <h1>SNOWFALL 31</h1>
+            <p>Service Premium • Toulouse & Alentours</p>
         </div>
     </div>
 
-    <!-- HASH & EXTRACTIONS -->
-    <div class="category-title">🍫 HASH & EXTRACTIONS</div>
+    <!-- ONGLET 1 : MENU / CATALOGUE -->
+    <div id="view-menu" class="view-section active">
+        <div class="products-grid">
+            <!-- Produit 1 -->
+            <div class="product-card">
+                <div class="product-img">
+                    <span class="badge-festive">HASH 🍫</span>
+                    <span>Jaune Mousseux</span>
+                </div>
+                <div class="product-details">
+                    <h3>Jaune Mousseux</h3>
+                    <p>Doux, classique & efficace. 10€/g</p>
+                    <button class="btn-details" onclick="orderItem('Jaune Mousseux', 10)">Commander</button>
+                </div>
+            </div>
 
-    <div class="product-card">
-        <div class="product-info">
-            <h3>Jaune Mousseux 🧽</h3>
-            <div class="desc">Doux, classique et efficace.</div>
-            <div class="price">10€ / g</div>
-        </div>
-        <div id="p1" class="action-box">
-            <button class="btn-add" onclick="changeQty('Jaune Mousseux', 1, 10, 'p1')">Ajouter</button>
+            <!-- Produit 2 -->
+            <div class="product-card">
+                <div class="product-img">
+                    <span class="badge-festive">HASH 🇲🇦</span>
+                    <span>73U / 120U</span>
+                </div>
+                <div class="product-details">
+                    <h3>73U Super Dry</h3>
+                    <p>Filtration haute qualité. 15€/g</p>
+                    <button class="btn-details" onclick="orderItem('73U Super Dry', 15)">Commander</button>
+                </div>
+            </div>
+
+            <!-- Produit 3 -->
+            <div class="product-card">
+                <div class="product-img">
+                    <span class="badge-festive">WEED 🌿</span>
+                    <span>Amnesia</span>
+                </div>
+                <div class="product-details">
+                    <h3>Amnesia Haze</h3>
+                    <p>Têtes compactes. 12€/g</p>
+                    <button class="btn-details" onclick="orderItem('Amnesia Haze', 12)">Commander</button>
+                </div>
+            </div>
+
+            <!-- Produit 4 -->
+            <div class="product-card">
+                <div class="product-img">
+                    <span class="badge-festive">FESTIF 🥳</span>
+                    <span>Puff / Vap</span>
+                </div>
+                <div class="product-details">
+                    <h3>Puff / Vap Pen</h3>
+                    <p>Prêt à l'emploi. 40€</p>
+                    <button class="btn-details" onclick="orderItem('Puff / Vap Pen', 40)">Commander</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="product-card">
-        <div class="product-info">
-            <h3>73U 🇲🇦</h3>
-            <div class="desc">Filtration de qualité supérieure.</div>
-            <div class="price">15€ / g</div>
-        </div>
-        <div id="p2" class="action-box">
-            <button class="btn-add" onclick="changeQty('73U', 1, 15, 'p2')">Ajouter</button>
-        </div>
-    </div>
-
-    <div class="product-card">
-        <div class="product-info">
-            <h3>120U 🇲🇦</h3>
-            <div class="desc">Semi-dry haut de gamme, propre.</div>
-            <div class="price">15€ / g</div>
-        </div>
-        <div id="p3" class="action-box">
-            <button class="btn-add" onclick="changeQty('120U', 1, 15, 'p3')">Ajouter</button>
+    <!-- ONGLET 2 : INFOS -->
+    <div id="view-infos" class="view-section">
+        <div class="content-card">
+            <h2>ℹ️ Informations & Horaires</h2>
+            <p>🕒 <b>Disponibilité :</b> Ouvert 7j/7 de 10h00 à 03h00 du matin sans interruption.</p>
+            <p>📍 <b>Zone desservie :</b> Toulouse centre et toute la périphérie / alentours.</p>
+            <p>⚡ <b>Service :</b> Livraison ultra rapide, discrète et professionnelle garantie.</p>
         </div>
     </div>
 
-    <div class="product-card">
-        <div class="product-info">
-            <h3>Fresh Frozen 🧊</h3>
-            <div class="desc">Extraction pure plantes fraîches.</div>
-            <div class="price">20€ / g</div>
-        </div>
-        <div id="p4" class="action-box">
-            <button class="btn-add" onclick="changeQty('Fresh Frozen', 1, 20, 'p4')">Ajouter</button>
+    <!-- ONGLET 3 : LIENS -->
+    <div id="view-liens" class="view-section">
+        <div class="content-card">
+            <h2>🔗 Liens Officiels</h2>
+            <p>Restez connectés avec nos canaux officiels pour ne rien rater des arrivages et des promos exclusives.</p>
+            <button class="btn-details" style="margin-top: 10px;" onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/snnow31_bot')">Rejoindre le canal principal</button>
         </div>
     </div>
 
-    <div class="product-card">
-        <div class="product-info">
-            <h3>Anonymuz Farm ⭐</h3>
-            <div class="desc">Exclusivité & puissance max.</div>
-            <div class="price">25€ / g</div>
-        </div>
-        <div id="p5" class="action-box">
-            <button class="btn-add" onclick="changeQty('Anonymuz Farm', 1, 25, 'p5')">Ajouter</button>
-        </div>
-    </div>
-
-    <!-- WEED & CALI -->
-    <div class="category-title">🌿 WEED & CALI</div>
-
-    <div class="product-card">
-        <div class="product-info">
-            <h3>Amnesia Haze ⚡</h3>
-            <div class="desc">Sativa énergique, têtes bien compactes.</div>
-            <div class="price">12€ / g</div>
-        </div>
-        <div id="p6" class="action-box">
-            <button class="btn-add" onclick="changeQty('Amnesia Haze', 1, 12, 'p6')">Ajouter</button>
+    <!-- ONGLET 4 : CONTACT -->
+    <div id="view-contact" class="view-section">
+        <div class="content-card">
+            <h2>📞 Service Contact & Support</h2>
+            <p>Besoin d'assistance, d'une information sur une commande ou d'un renseignement ?</p>
+            <p>Contactez directement notre opérateur via le bot Telegram ou l'admin dédié.</p>
+            <button class="btn-details" style="margin-top: 10px; background: linear-gradient(135deg, #10b981, #059669); color:#fff;" onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/snnow31_bot')">Ouvrir le chat support</button>
         </div>
     </div>
 
-    <div class="product-card">
-        <div class="product-info">
-            <h3>California Orange 🍊</h3>
-            <div class="desc">Goût fruité prononcé, effet lourd.</div>
-            <div class="price">18€ / g</div>
-        </div>
-        <div id="p7" class="action-box">
-            <button class="btn-add" onclick="changeQty('California Orange', 1, 18, 'p7')">Ajouter</button>
-        </div>
-    </div>
-
-    <!-- FESTIF & AUTRES -->
-    <div class="category-title">🥳 FESTIF & DIVERS</div>
-
-    <div class="product-card">
-        <div class="product-info">
-            <h3>Puff / Vap Pen 💨</h3>
-            <div class="desc">Prêt à l'emploi, discret et puissant.</div>
-            <div class="price">40€ / unité</div>
-        </div>
-        <div id="p8" class="action-box">
-            <button class="btn-add" onclick="changeQty('Puff / Vap Pen', 1, 40, 'p8')">Ajouter</button>
-        </div>
-    </div>
-
-    <!-- Barre Panier Flottante -->
-    <div id="cartBar" class="cart-bar">
-        <div class="cart-info">
-            Total : <b id="cartTotal">0 €</b> <br><span id="cartCount">0 article</span>
-        </div>
-        <button class="btn-checkout" onclick="sendOrder()">Valider la commande 🚀</button>
-    </div>
+    <!-- Barre de Navigation en Bas -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('menu', this)">
+            <span class="icon">🏠</span>
+            Menu
+        </button>
+        <button class="nav-item" onclick="switchTab('infos', this)">
+            <span class="icon">ℹ️</span>
+            Infos
+        </button>
+        <button class="nav-item" onclick="switchTab('liens', this)">
+            <span class="icon">🔗</span>
+            Liens
+        </button>
+        <button class="nav-item" onclick="switchTab('contact', this)">
+            <span class="icon">✉️</span>
+            Contact
+        </button>
+    </nav>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        let cart = {};
+        function switchTab(tabName, element) {
+            // Changer les vues
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('view-' + tabName).classList.add('active');
 
-        function changeQty(name, delta, price, elementId) {
-            if (!cart[name]) {
-                cart[name] = { qty: 0, price: price, id: elementId };
-            }
-            cart[name].qty += delta;
-            
-            if (cart[name].qty <= 0) {
-                delete cart[name];
-                document.getElementById(elementId).innerHTML = `<button class="btn-add" onclick="changeQty('${name}', 1, ${price}, '${elementId}')">Ajouter</button>`;
-            } else {
-                document.getElementById(elementId).innerHTML = `
-                    <div class="qty-controls">
-                        <button class="qty-btn" onclick="changeQty('${name}', -1, ${price}, '${elementId}')">-</button>
-                        <span class="qty-val">${cart[name].qty}</span>
-                        <button class="qty-btn" onclick="changeQty('${name}', 1, ${price}, '${elementId}')">+</button>
-                    </div>
-                `;
-            }
+            // Gérer le style actif de la nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
 
-            updateCartBar();
-            tg.HapticFeedback.impactOccurred('light');
+            tg.HapticFeedback.selectionChanged();
         }
 
-        function updateCartBar() {
-            let totalItems = 0;
-            let totalPrice = 0;
-
-            for (let key in cart) {
-                totalItems += cart[key].qty;
-                totalPrice += cart[key].qty * cart[key].price;
-            }
-
-            document.getElementById('cartCount').innerText = totalItems + ' article(s)';
-            document.getElementById('cartTotal').innerText = totalPrice + ' €';
-
-            let bar = document.getElementById('cartBar');
-            if (totalItems > 0) {
-                bar.classList.add('visible');
-            } else {
-                bar.classList.remove('visible');
-            }
-        }
-
-        function sendOrder() {
-            let orderSummary = "🛒 Nouvelle Commande SNOWFALL31 :\n";
-            for (let key in cart) {
-                orderSummary += `- ${key} x${cart[key].qty} (${cart[key].qty * cart[key].price}€)\n`;
-            }
-            orderSummary += `Total : ${document.getElementById('cartTotal').innerText}`;
-            
-            tg.sendData(JSON.stringify({action: "order", summary: orderSummary}));
+        function orderItem(productName, price) {
+            tg.HapticFeedback.impactOccurred('medium');
+            let data = {
+                action: "order",
+                summary: `Produit sélectionné : ${productName} (${price}€)`
+            };
+            tg.sendData(JSON.stringify(data));
         }
     </script>
 </body>
