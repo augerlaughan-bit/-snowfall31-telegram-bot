@@ -3,390 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Snowfall 31 - Catalogue Officiel</title>
-    <!-- Script Telegram Web App -->
+    <title>SNOWFALL 31 - Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: #131b2e;
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
             --accent-blue: #38bdf8;
-            --accent-gold: #f59e0b;
-            --text-main: #ffffff;
-            --text-muted: #94a3b8;
-            --border-color: #1e293b;
+            --accent-gold: #fbbf24;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
         }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             padding: 12px;
             padding-bottom: 90px;
         }
-
-        header {
+        /* Header */
+        .header {
             text-align: center;
-            margin-bottom: 20px;
-            padding-top: 10px;
+            padding: 16px 10px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 16px;
         }
-
-        header h1 {
-            font-size: 1.6rem;
+        .header h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
             color: var(--accent-blue);
-            letter-spacing: 1px;
             margin-bottom: 4px;
         }
-
-        header p {
-            font-size: 0.85rem;
+        .header p {
+            font-size: 13px;
             color: var(--text-muted);
         }
-
-        .badge-status {
+        .status-badge {
             display: inline-block;
+            margin-top: 8px;
+            padding: 4px 12px;
             background: rgba(16, 185, 129, 0.15);
             color: #34d399;
-            padding: 3px 10px;
             border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            margin-top: 6px;
+            font-size: 11px;
+            font-weight: 600;
             border: 1px solid rgba(52, 211, 153, 0.3);
         }
-
-        .tabs {
+        /* Filtres / Onglets */
+        .categories {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             overflow-x: auto;
-            margin-bottom: 15px;
-            padding-bottom: 4px;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            scrollbar-width: none;
         }
-
-        .tab-btn {
+        .categories::-webkit-scrollbar { display: none; }
+        .chip {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 8px 14px;
+            color: var(--text-main);
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 0.82rem;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 500;
             white-space: nowrap;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
         }
-
-        .tab-btn.active {
+        .chip.active {
             background: var(--accent-blue);
             color: #000;
             border-color: var(--accent-blue);
-        }
-
-        .section-title {
-            font-size: 1rem;
-            color: var(--accent-gold);
-            margin: 15px 0 10px 0;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
-
-        .product-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        /* Liste des produits */
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
         }
-
         .product-card {
-            background-color: var(--card-bg);
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
-        .product-info {
-            flex: 1;
-            padding-right: 10px;
+        .product-info h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
-
-        .product-name {
-            font-weight: 700;
-            font-size: 0.92rem;
-            margin-bottom: 2px;
-        }
-
-        .product-desc {
-            font-size: 0.78rem;
+        .product-info p {
+            font-size: 12px;
             color: var(--text-muted);
             margin-bottom: 6px;
         }
-
-        .product-price {
-            font-size: 0.85rem;
+        .price {
+            font-size: 13px;
+            font-weight: 700;
             color: var(--accent-gold);
-            font-weight: bold;
         }
-
-        .add-btn {
+        .btn-add {
             background: var(--accent-blue);
             color: #000;
             border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.8rem;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
             cursor: pointer;
         }
-
-        .cart-bar {
+        /* Barre de validation fixe en bas */
+        .footer-bar {
             position: fixed;
             bottom: 0;
             left: 0;
-            width: 100%;
-            background: #111827;
+            right: 0;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
             border-top: 1px solid var(--border-color);
             padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
         }
-
-        .cart-info {
-            font-size: 0.85rem;
+        .cart-summary {
+            font-size: 13px;
             color: var(--text-muted);
         }
-
-        .cart-info span {
+        .cart-summary span {
             color: var(--text-main);
             font-weight: bold;
         }
-
-        .checkout-btn {
+        .btn-checkout {
             background: #10b981;
-            color: white;
+            color: #fff;
             border: none;
             padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 0.9rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
             cursor: pointer;
         }
-
-        .info-box {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px;
-            margin-top: 20px;
-            font-size: 0.82rem;
-            color: var(--text-muted);
-        }
-        .info-box span { color: var(--text-main); font-weight: 500; }
     </style>
 </head>
 <body>
 
+    <div class="header">
+        <h1>❄️ SNOWFALL 31 🏔️</h1>
+        <p>Service Premium • Toulouse & Alentours</p>
+        <div class="status-badge">🟢 OUVERT • 7J/7 (10h - 03h)</div>
+    </div>
+
+    <div class="categories">
+        <div class="chip active">Tout voir</div>
+        <div class="chip">🍫 Hash</div>
+        <div class="chip">🌿 Weed</div>
+        <div class="chip">🥳 Festif</div>
+    </div>
+
+    <div class="section-title">🍫 HASH & EXTRACTIONS</div>
+
+    <div class="product-card">
+        <div class="product-info">
+            <h3>Jaune Mousseux 🧽</h3>
+            <p>Doux, classique et efficace.</p>
+            <div class="price">À partir de 10€/g</div>
+        </div>
+        <button class="btn-add" onclick="addItem('Jaune Mousseux')">Ajouter</button>
+    </div>
+
+    <div class="product-card">
+        <div class="product-info">
+            <h3>73U 🇲🇦</h3>
+            <p>Filtration de qualité supérieure.</p>
+            <div class="price">À partir de 15€/g</div>
+        </div>
+        <button class="btn-add" onclick="addItem('73U')">Ajouter</button>
+    </div>
+
+    <div class="product-card">
+        <div class="product-info">
+            <h3>Fresh Frozen 🧊</h3>
+            <p>Extraction pure de plantes fraîches.</p>
+            <div class="price">À partir de 20€/g</div>
+        </div>
+        <button class="btn-add" onclick="addItem('Fresh Frozen')">Ajouter</button>
+    </div>
+
+    <div class="footer-bar">
+        <div class="cart-summary">Sélection : <span id="count">0 article</span></div>
+        <button class="btn-checkout" onclick="checkout()">Commander</button>
+    </div>
+
     <script>
-        // Initialisation de Telegram Web App
         let tg = window.Telegram.WebApp;
         tg.expand();
-    </script>
 
-    <div class="container">
-        <header>
-            <h1>❄️ SNOWFALL 31 🏔️</h1>
-            <p>Service Premium • Toulouse & Alentours</p>
-            <div class="badge-status">🟢 OUVERT • 7J/7 (10h - 03h)</div>
-        </header>
-
-        <!-- FILTRES -->
-        <div class="tabs">
-            <button class="tab-btn active" onclick="filterMenu('all')">Tout voir</button>
-            <button class="tab-btn" onclick="filterMenu('hash')">🍫 Hash</button>
-            <button class="tab-btn" onclick="filterMenu('weed')">🍀 Weed</button>
-            <button class="tab-btn" onclick="filterMenu('festif')">🥳 Festif</button>
-        </div>
-
-        <!-- HASH -->
-        <div id="section-hash" class="menu-section">
-            <div class="section-title">🍫 HASH & EXTRACTIONS</div>
-            <div class="product-grid">
-                <div class="product-card" data-category="hash">
-                    <div class="product-info">
-                        <div class="product-name">Jaune Mousseux 🧽</div>
-                        <div class="product-desc">Doux, classique et efficace.</div>
-                        <div class="product-price">À partir de 10€/g</div>
-                    </div>
-                    <button class="add-btn" onclick="addToCart('Jaune Mousseux', 10)">Ajouter</button>
-                </div>
-                <div class="product-card" data-category="hash">
-                    <div class="product-info">
-                        <div class="product-name">73U 🇲🇦</div>
-                        <div class="product-desc">Filtration de qualité supérieure.</div>
-                        <div class="product-price">À partir de 15€/g</div>
-                    </div>
-                    <button class="add-btn" onclick="addToCart('73U', 15)">Ajouter</button>
-                </div>
-                <div class="product-card" data-category="hash">
-                    <div class="product-info">
-                        <div class="product-name">120U 🇲🇦</div>
-                        <div class="product-desc">Semi-dry haut de gamme, propre.</div>
-                        <div class="product-price">À partir de 15€/g</div>
-                    </div>
-                    <button class="add-btn" onclick="addToCart('120U', 15)">Ajouter</button>
-                </div>
-                <div class="product-card" data-category="hash">
-                    <div class="product-info">
-                        <div class="product-name">Fresh Frozen 🧊</div>
-                        <div class="product-desc">Extraction pure de plantes fraîches.</div>
-                        <div class="product-price">À partir de 20€/g</div>
-                    </div>
-                    <button class="add-btn" onclick="addToCart('Fresh Frozen', 20)">Ajouter</button>
-                </div>
-                <div class="product-card" data-category="hash">
-                    <div class="product-info">
-                        <div class="product-name">Anonymuz Farm ⭐️</div>
-                        <div class="product-desc">Exclusivité et puissance maximale.</div>
-                        <div class="product-price">À partir de 25€/g</div>
-                    </div>
-                    <button class="add-btn" onclick="addToCart('Anonymuz Farm', 25)">Ajouter</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- WEED -->
-        <div id="section-weed" class="menu-section">
-            <div class="section-title">🍀 WEED & CALI</div>
-            <div class="product-grid">
-                <div class="product-card" data-category="weed">
-                    <div class="product-info">
-                        <div class="product-name">Amnesia 🥗</div>
-                        <div class="product-desc">Sativa énergique et résineuse.</div>
-                        <div class="product-price">À partir de 10€/g</div>
-                    </div>
-                    <button class="add-btn" onclick="addToCart('Amnesia', 10)">Ajouter</button>
-                </div>
-                <div class="product-card" data-category="weed">
-                    <div class="product-info">
-                        <div class="product-name">Cali Top Shelf US 🇺🇸</div>
-                        <div class="product-desc">Import US, puissance XXL.</div>
-                        <div class="product-price">À partir de 30€/g</div>
-                    </div>
-                    <button class="add-btn" onclick="addToCart('Cali Top Shelf US', 30)">Ajouter</button>
-                </div>
-                <div class="product-card" data-category="weed">
-                    <div class="product-info">
-                        <div class="product-name">Cali Mid Shelf 🇪🇸</div>
-                        <div class="product-desc">Cultivé avec soin en Espagne.</div>
-                        <div class="product-price">À partir de 15€/g</div>
-                    </div>
-                    <button class="add-btn" onclick="addToCart('Cali Mid Shelf', 15)">Ajouter</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- FESTIF -->
-        <div id="section-festif" class="menu-section">
-            <div class="section-title">🥳 MENU FESTIF</div>
-            <div class="product-grid">
-                <div class="product-card" data-category="festif">
-                    <div class="product-info">
-                        <div class="product-name">Coke ❄️</div>
-                        <div class="product-desc">Pureté contrôlée.</div>
-                        <div class="product-price">Sur demande</div>
-                    </div>
-                    <button class="add-btn" onclick="addToCart('Coke', 0)">Ajouter</button>
-                </div>
-                <div class="product-card" data-category="festif">
-                    <div class="product-info">
-                        <div class="product-name">Exta 🍭</div>
-                        <div class="product-desc">Pour vos soirées.</div>
-                        <div class="product-price">Sur demande</div>
-                    </div>
-                    <button class="add-btn" onclick="addToCart('Exta', 0)">Ajouter</button>
-                </div>
-                <div class="product-card" data-category="festif">
-                    <div class="product-info">
-                        <div class="product-name">Kétamine 🐴</div>
-                        <div class="product-desc">Qualité rigoureuse.</div>
-                        <div class="product-price">Sur demande</div>
-                    </div>
-                    <button class="add-btn" onclick="addToCart('Kétamine', 0)">Ajouter</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- INFOS -->
-        <div class="info-box">
-            <p>🏢 <span>Meetup :</span> 31200 Toulouse (Métro Ⓜ️)</p>
-            <p style="margin-top: 4px;">🚘 <span>Livraison :</span> Toulouse & 31 / 32 / 81 / 82 / 09 / 11 / 12</p>
-        </div>
-    </div>
-
-    <!-- BARRE DE PANIER FLOTTANTE -->
-    <div class="cart-bar" id="cartBar" style="display: none;">
-        <div class="cart-info">
-            Articles : <span id="cartCount">0</span>
-        </div>
-        <button class="checkout-btn" onclick="checkout()">Commander 🚀</button>
-    </div>
-
-    <script>
-        let cart = [];
-
-        function addToCart(name, price) {
-            cart.push({ name, price });
-            updateCartUI();
-            if (window.Telegram.WebApp.HapticFeedback) {
-                window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-            }
-        }
-
-        function updateCartUI() {
-            const cartBar = document.getElementById('cartBar');
-            const cartCount = document.getElementById('cartCount');
-            if (cart.length > 0) {
-                cartBar.style.display = 'flex';
-                cartCount.innerText = cart.length;
-            } else {
-                cartBar.style.display = 'none';
-            }
-        }
-
-        function filterMenu(category) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            const sections = document.querySelectorAll('.menu-section');
-            sections.forEach(sec => {
-                if (category === 'all' || sec.id === 'section-' + category) {
-                    sec.style.display = 'block';
-                } else {
-                    sec.style.display = 'none';
-                }
-            });
+        let cartCount = 0;
+        function addItem(name) {
+            cartCount++;
+            document.getElementById('count').innerText = cartCount + ' article(s)';
+            tg.HapticFeedback.impactOccurred('medium');
         }
 
         function checkout() {
-            let orderText = "🛒 *Nouvelle Commande - Snowfall 31* :\n\n";
-            cart.forEach((item, index) => {
-                orderText += `${index + 1}. ${item.name}\n`;
-            });
-            
-            // Envoi des données au bot ou redirection vers le contact
-            const encodedText = encodeURIComponent(orderText);
-            window.open(`https://t.me/apoucoffe31?text=${encodedText}`, '_blank');
+            if(cartCount === 0) {
+                alert("Veuillez sélectionner au moins un article.");
+                return;
+            }
+            tg.sendData(JSON.stringify({action: "order", items: cartCount}));
         }
     </script>
 </body>
