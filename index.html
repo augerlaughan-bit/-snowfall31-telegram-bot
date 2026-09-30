@@ -44,16 +44,13 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
         .logo-container {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             background: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 900;
-            color: #000;
-            font-size: 18px;
             border: 2px solid var(--gold);
             overflow: hidden;
             flex-shrink: 0;
@@ -62,6 +59,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center 30%; /* Centre l'image pour bien voir le logo principal */
         }
         .header-title h1 {
             font-size: 17px;
@@ -108,11 +106,6 @@
             justify-content: center;
             color: var(--muted);
             font-size: 11px;
-        }
-        .product-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
         .badge-festive {
             position: absolute;
@@ -212,11 +205,10 @@
 </head>
 <body>
 
-    <!-- Header Supérieur avec Logo -->
+    <!-- Header Supérieur avec ton Logo -->
     <div class="top-header">
         <div class="logo-container">
-            <!-- Remplace par le lien de ton logo si tu en as un, sinon initiales -->
-            ❄️
+            <img src="https://i.ibb.co/3mS7y6w/logo.jpg" alt="Logo SNOWFALL31" id="user-logo">
         </div>
         <div class="header-title">
             <h1>SNOWFALL 31</h1>
@@ -227,7 +219,6 @@
     <!-- ONGLET 1 : MENU / CATALOGUE -->
     <div id="view-menu" class="view-section active">
         <div class="products-grid">
-            <!-- Produit 1 -->
             <div class="product-card">
                 <div class="product-img">
                     <span class="badge-festive">HASH 🍫</span>
@@ -240,7 +231,6 @@
                 </div>
             </div>
 
-            <!-- Produit 2 -->
             <div class="product-card">
                 <div class="product-img">
                     <span class="badge-festive">HASH 🇲🇦</span>
@@ -253,7 +243,6 @@
                 </div>
             </div>
 
-            <!-- Produit 3 -->
             <div class="product-card">
                 <div class="product-img">
                     <span class="badge-festive">WEED 🌿</span>
@@ -266,7 +255,6 @@
                 </div>
             </div>
 
-            <!-- Produit 4 -->
             <div class="product-card">
                 <div class="product-img">
                     <span class="badge-festive">FESTIF 🥳</span>
@@ -325,7 +313,7 @@
             Liens
         </button>
         <button class="nav-item" onclick="switchTab('contact', this)">
-            <span class="icon">✉️</span>
+            <span class="icon">✉️️</span>
             Contact
         </button>
     </nav>
@@ -334,12 +322,13 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
+        // Si tu as hébergé ton image ailleurs, remplace le lien ci-dessous par le lien direct de ton image :
+        // document.getElementById('user-logo').src = "TON_LIEN_DIRECT_ICI";
+
         function switchTab(tabName, element) {
-            // Changer les vues
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('view-' + tabName).classList.add('active');
 
-            // Gérer le style actif de la nav
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
 
