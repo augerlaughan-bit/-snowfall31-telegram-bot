@@ -23,7 +23,7 @@
     <!-- FontAwesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-darkBg text-gray-100 font-sans antialiased pb-28 selection:bg-blue-500 selection:text-white">
+<body class="bg-darkBg text-gray-100 font-sans antialiased pb-32 selection:bg-blue-500 selection:text-white">
 
     <!-- En-tête / Header -->
     <header class="sticky top-0 z-50 bg-darkBg/80 backdrop-blur-md border-b border-gray-800 px-4 py-3 flex items-center justify-between">
@@ -34,7 +34,6 @@
             <h1 class="font-bold tracking-wider text-sm">SNOWFALL31</h1>
             <p class="text-[10px] text-gray-400">service premium • toulouse</p>
         </div>
-        <!-- Bouton Paramètres / Admin pour modifier les tarifs et médias -->
         <button onclick="toggleAdminModal()" class="w-8 h-8 rounded-full bg-cardBg border border-gray-700 flex items-center justify-center text-gray-300 hover:text-white transition shadow-md" title="Panneau Admin">
             <i class="fa-solid fa-gear"></i>
         </button>
@@ -62,50 +61,78 @@
             <button onclick="filterCategory('festif')" class="cat-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-cardBg text-gray-300 border border-gray-800 hover:border-gray-700 transition">🥰 Festif</button>
         </div>
 
-        <!-- CONTENEUR DES PRODUITS DYNAMIQUES -->
+        <!-- CONTENEUR DES PRODUITS -->
         <div id="dynamic-products-container" class="space-y-6">
-            <!-- Généré automatiquement par JavaScript -->
+            <!-- Généré par JavaScript -->
         </div>
 
     </main>
 
-    <!-- MODAL DU PANNEAU ADMIN (Pour modifier les prix, noms et vidéos) -->
-    <div id="admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <!-- MODAL DU PANNEAU ADMIN COMPLET -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-cardBg border border-gray-700 rounded-2xl w-full max-w-md p-5 space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-gray-800 pb-3">
-                <h3 class="font-bold text-white text-sm"><i class="fa-solid fa-sliders text-blue-500 mr-2"></i>Modifier Tarifs & Médias</h3>
+                <h3 class="font-bold text-white text-sm"><i class="fa-solid fa-sliders text-blue-500 mr-2"></i>Gestion Totale Produits & Tarifs</h3>
                 <button onclick="toggleAdminModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
+            <button onclick="addNewProductPrompt()" class="w-full bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/40 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-plus"></i>
+                <span>Ajouter un nouveau produit</span>
+            </button>
+
             <div class="space-y-3">
-                <p class="text-[11px] text-gray-400">Modifiez directement vos articles et ajoutez un lien vidéo (.mp4) :</p>
-                <div id="admin-product-list" class="space-y-3">
-                    <!-- Inputs dynamiques -->
+                <div id="admin-product-list" class="space-y-4">
+                    <!-- Liste dynamique -->
                 </div>
             </div>
 
             <div class="border-t border-gray-800 pt-3 flex space-x-2">
-                <button onclick="saveAdminChanges()" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2.5 rounded-xl transition shadow-lg shadow-blue-600/30">Enregistrer</button>
+                <button onclick="saveAdminChanges()" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2.5 rounded-xl transition shadow-lg shadow-blue-600/30">Enregistrer tout</button>
                 <button onclick="resetDefaultProducts()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs px-3 py-2.5 rounded-xl transition" title="Réinitialiser"><i class="fa-solid fa-rotate-right"></i></button>
             </div>
         </div>
     </div>
 
-    <!-- Panier Flottant Dynamique -->
-    <div id="cart-bar" class="fixed bottom-20 left-4 right-4 max-w-md mx-auto bg-blue-600 text-white p-3 rounded-2xl shadow-2xl flex items-center justify-between transform translate-y-32 transition-transform duration-300 z-40">
-        <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm" id="cart-count">0</div>
-            <div>
-                <p class="text-xs font-semibold">Panier en cours</p>
-                <p id="cart-total" class="text-sm font-bold">0.00 €</p>
+    <!-- PANIER FLOTTANT & OPTIONS DE LIVRAISON -->
+    <div id="cart-bar" class="fixed bottom-20 left-4 right-4 max-w-md mx-auto bg-cardBg border border-blue-500/40 text-white p-4 rounded-2xl shadow-2xl space-y-3 transform translate-y-40 transition-transform duration-300 z-40">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-2">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center font-bold text-sm" id="cart-count">0</div>
+                <div>
+                    <p class="text-xs font-semibold text-gray-300">Votre Sélection</p>
+                    <p id="cart-total" class="text-xs font-bold text-blue-400">0 article(s)</p>
+                </div>
+            </div>
+            <button onclick="clearCart()" class="text-gray-500 hover:text-red-400 text-xs"><i class="fa-solid fa-trash-can"></i> Vider</button>
+        </div>
+
+        <!-- Choix Mode : Livraison ou Meet-up -->
+        <div class="space-y-2">
+            <label class="text-[11px] text-gray-400 font-medium block">Mode de récupération :</label>
+            <div class="grid grid-cols-2 gap-2">
+                <button type="button" id="btn-meetup" onclick="setDeliveryMode('Meet-up')" class="mode-btn bg-blue-600 text-white text-xs font-bold py-2 rounded-xl border border-blue-500 transition">
+                    📍 Meet-up
+                </button>
+                <button type="button" id="btn-livraison" onclick="setDeliveryMode('Livraison')" class="mode-btn bg-darkBg text-gray-300 text-xs font-bold py-2 rounded-xl border border-gray-800 transition">
+                    🛵 Livraison
+                </button>
             </div>
         </div>
-        <button onclick="checkout()" class="bg-white text-blue-600 px-4 py-1.5 rounded-xl font-bold text-xs shadow hover:bg-gray-100 transition">
-            Valider <i class="fa-solid fa-arrow-right ml-1"></i>
+
+        <!-- Champ Adresse (S'affiche uniquement si Livraison est sélectionné) -->
+        <div id="address-container" class="hidden space-y-1">
+            <label class="text-[11px] text-amber-400 font-medium block"><i class="fa-solid fa-location-dot mr-1"></i> Adresse exacte de livraison :</label>
+            <input type="text" id="client-address" placeholder="N°, Rue, Ville, Bâtiment, Code postal..." class="w-full bg-darkBg border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:border-blue-500 outline-none">
+        </div>
+
+        <button onclick="checkout()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition flex items-center justify-center space-x-2">
+            <span>Commander sur Telegram</span>
+            <i class="fa-solid fa-arrow-right"></i>
         </button>
     </div>
 
-    <!-- Barre de Navigation avec vos Vrais Liens Telegram -->
+    <!-- Barre de Navigation -->
     <nav class="fixed bottom-0 left-0 right-0 bg-darkBg/95 backdrop-blur-lg border-t border-gray-800 py-3 px-6 flex justify-around items-center z-50">
         <a href="#" class="flex flex-col items-center text-blue-500">
             <i class="fa-solid fa-house text-lg mb-1"></i>
@@ -127,16 +154,16 @@
 
     <!-- Scripts -->
     <script>
-        // Vos produits initiaux
         const defaultProducts = [
-            { id: 1, category: 'hash', badge: 'HASH 🍯', name: 'Jaune Mousseux', subtitle: 'Jaune Mousseux', desc: 'Doux, classique & efficace.', price: 10, media: '' },
-            { id: 2, category: 'hash', badge: 'HASH 🇨🇦', name: '73U Super Dry', subtitle: '73U / 120U', desc: 'Filtration haute qualité.', price: 15, media: '' },
-            { id: 3, category: 'weed', badge: 'WEED 🌿', name: 'Amnesia Haze', subtitle: 'Amnesia', desc: 'Têtes compactes.', price: 12, media: '' },
-            { id: 4, category: 'festif', badge: 'FESTIF 🥰', name: 'Puff / Vap Pen', subtitle: 'Puff / Vap', desc: 'Prêt à l\'emploi.', price: 40, media: '' }
+            { id: 1, category: 'hash', badge: 'HASH 🍯', name: 'Jaune Mousseux', subtitle: 'Jaune Mousseux', pricingText: '1g = 10€ / 5g = 45€', media: '' },
+            { id: 2, category: 'hash', badge: 'HASH 🇨🇦', name: '73U Super Dry', subtitle: '73U / 120U', pricingText: '1g = 15€ / 10g = 130€', media: '' },
+            { id: 3, category: 'weed', badge: 'WEED 🌿', name: 'Amnesia Haze', subtitle: 'Amnesia', pricingText: '1g = 12€ / 5g = 55€', media: '' },
+            { id: 4, category: 'festif', badge: 'FESTIF 🥰', name: 'Puff / Vap Pen', subtitle: 'Puff / Vap', pricingText: 'Unité = 40€', media: '' }
         ];
 
-        let products = JSON.parse(localStorage.getItem('snow_products_v2')) || defaultProducts;
+        let products = JSON.parse(localStorage.getItem('snow_products_v3')) || defaultProducts;
         let cart = [];
+        let selectedDeliveryMode = 'Meet-up';
 
         window.onload = function() {
             renderProducts();
@@ -177,9 +204,9 @@
                                 ${mediaHTML}
                                 <span class="text-[10px] text-gray-500 block mb-0.5">${p.subtitle}</span>
                                 <h4 class="font-bold text-sm text-white leading-tight mb-1">${p.name}</h4>
-                                <p class="text-[11px] text-gray-400 line-clamp-2">${p.desc} • <strong class="text-blue-400">${p.price}€</strong></p>
+                                <p class="text-[11px] text-blue-400 font-semibold mb-1">${p.pricingText}</p>
                             </div>
-                            <button onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})" class="mt-4 w-full bg-blue-600/25 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/40 font-medium text-xs py-2 rounded-xl transition duration-300 flex items-center justify-center space-x-1">
+                            <button onclick="addToCart('${p.name.replace(/'/g, "\\'")}', '${p.pricingText.replace(/'/g, "\\'")}')" class="mt-3 w-full bg-blue-600/25 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/40 font-medium text-xs py-2 rounded-xl transition duration-300 flex items-center justify-center space-x-1">
                                 <i class="fa-solid fa-cart-plus"></i>
                                 <span>Commander</span>
                             </button>
@@ -203,41 +230,76 @@
 
             products.forEach((p, index) => {
                 listContainer.innerHTML += `
-                    <div class="bg-darkBg/70 border border-gray-800 p-3 rounded-xl space-y-2">
+                    <div class="bg-darkBg/80 border border-gray-800 p-3 rounded-xl space-y-2 relative group">
                         <div class="flex justify-between items-center text-xs font-semibold text-gray-300">
-                            <span>#${index + 1} - ${p.name}</span>
-                            <span class="text-blue-400 uppercase text-[10px]">${p.category}</span>
+                            <span>Article #${index + 1}</span>
+                            <button onclick="deleteProduct(${index})" class="text-red-400 hover:text-red-300 px-2 py-1 text-xs"><i class="fa-solid fa-trash"></i> Supprimer</button>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="admin-name-${index}" value="${p.name}" class="bg-cardBg border border-gray-700 rounded-lg px-2 py-1 text-xs text-white" placeholder="Nom">
-                            <input type="number" id="admin-price-${index}" value="${p.price}" class="bg-cardBg border border-gray-700 rounded-lg px-2 py-1 text-xs text-white" placeholder="Prix (€)">
+                            <input type="text" id="admin-name-${index}" value="${p.name}" class="bg-cardBg border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white" placeholder="Nom">
+                            <select id="admin-cat-${index}" class="bg-cardBg border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white">
+                                <option value="hash" ${p.category==='hash'?'selected':''}>Hash</option>
+                                <option value="weed" ${p.category==='weed'?'selected':''}>Weed</option>
+                                <option value="festif" ${p.category==='festif'?'selected':''}>Festif</option>
+                            </select>
                         </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="admin-sub-${index}" value="${p.subtitle}" class="bg-cardBg border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white" placeholder="Sous-titre">
+                            <input type="text" id="admin-badge-${index}" value="${p.badge}" class="bg-cardBg border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white" placeholder="Badge">
+                        </div>
+                        <input type="text" id="admin-pricing-${index}" value="${p.pricingText}" class="w-full bg-cardBg border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-amber-400 font-semibold" placeholder="Tarifs (ex: 1g=10€ / 5g=45€)">
                         <input type="text" id="admin-media-${index}" value="${p.media || ''}" class="w-full bg-cardBg border border-gray-700 rounded-lg px-2 py-1 text-[11px] text-gray-300" placeholder="Lien direct vidéo (.mp4)">
                     </div>
                 `;
             });
         }
 
+        function addNewProductPrompt() {
+            products.push({
+                id: Date.now(),
+                category: 'hash',
+                badge: 'NOUVEAU ✨',
+                name: 'Nouveau Produit',
+                subtitle: 'Variété',
+                pricingText: '1g = 10€',
+                media: ''
+            });
+            renderAdminInputs();
+        }
+
+        function deleteProduct(index) {
+            if(confirm('Supprimer cet article ?')) {
+                products.splice(index, 1);
+                renderAdminInputs();
+            }
+        }
+
         function saveAdminChanges() {
             products.forEach((p, index) => {
                 const nameInput = document.getElementById(`admin-name-${index}`);
-                const priceInput = document.getElementById(`admin-price-${index}`);
+                const catInput = document.getElementById(`admin-cat-${index}`);
+                const subInput = document.getElementById(`admin-sub-${index}`);
+                const badgeInput = document.getElementById(`admin-badge-${index}`);
+                const pricingInput = document.getElementById(`admin-pricing-${index}`);
                 const mediaInput = document.getElementById(`admin-media-${index}`);
 
                 if (nameInput) p.name = nameInput.value;
-                if (priceInput) p.price = parseFloat(priceInput.value) || 0;
+                if (catInput) p.category = catInput.value;
+                if (subInput) p.subtitle = subInput.value;
+                if (badgeInput) p.badge = badgeInput.value;
+                if (pricingInput) p.pricingText = pricingInput.value;
                 if (mediaInput) p.media = mediaInput.value;
             });
 
-            localStorage.setItem('snow_products_v2', JSON.stringify(products));
+            localStorage.setItem('snow_products_v3', JSON.stringify(products));
             toggleAdminModal();
             renderProducts();
             alert('Modifications enregistrées !');
         }
 
         function resetDefaultProducts() {
-            if(confirm('Réinitialiser les tarifs initiaux ?')) {
-                localStorage.removeItem('snow_products_v2');
+            if(confirm('Réinitialiser par défaut ?')) {
+                localStorage.removeItem('snow_products_v3');
                 products = JSON.parse(JSON.stringify(defaultProducts));
                 renderProducts();
                 renderAdminInputs();
@@ -245,9 +307,31 @@
             }
         }
 
-        function addToCart(name, price) {
-            cart.push({ name, price });
+        function addToCart(name, pricing) {
+            cart.push({ name, pricing });
             updateCartUI();
+        }
+
+        function clearCart() {
+            cart = [];
+            updateCartUI();
+        }
+
+        function setDeliveryMode(mode) {
+            selectedDeliveryMode = mode;
+            const btnMeetup = document.getElementById('btn-meetup');
+            const btnLivraison = document.getElementById('btn-livraison');
+            const addressContainer = document.getElementById('address-container');
+
+            if (mode === 'Meet-up') {
+                btnMeetup.className = "mode-btn bg-blue-600 text-white text-xs font-bold py-2 rounded-xl border border-blue-500 transition";
+                btnLivraison.className = "mode-btn bg-darkBg text-gray-300 text-xs font-bold py-2 rounded-xl border border-gray-800 transition";
+                addressContainer.classList.add('hidden');
+            } else {
+                btnLivraison.className = "mode-btn bg-blue-600 text-white text-xs font-bold py-2 rounded-xl border border-blue-500 transition";
+                btnMeetup.className = "mode-btn bg-darkBg text-gray-300 text-xs font-bold py-2 rounded-xl border border-gray-800 transition";
+                addressContainer.classList.remove('hidden');
+            }
         }
 
         function updateCartUI() {
@@ -256,12 +340,11 @@
             const cartTotal = document.getElementById('cart-total');
 
             if (cart.length > 0) {
-                cartBar.classList.remove('translate-y-32');
+                cartBar.classList.remove('translate-y-40');
                 cartCount.innerText = cart.length;
-                let total = cart.reduce((sum, item) => sum + item.price, 0);
-                cartTotal.innerText = total + ' €';
+                cartTotal.innerText = `${cart.length} article(s) sélectionné(s)`;
             } else {
-                cartBar.classList.add('translate-y-32');
+                cartBar.classList.add('translate-y-40');
             }
         }
 
@@ -283,9 +366,19 @@
         }
 
         function checkout() {
-            let orderSummary = cart.map(item => item.name).join(', ');
-            let total = cart.reduce((sum, item) => sum + item.price, 0);
-            let message = encodeURIComponent(`Bonjour, je souhaite commander : ${orderSummary} pour un total de ${total}€.`);
+            let orderSummary = cart.map(item => `• ${item.name} (${item.pricing})`).join('%0A');
+            let addressText = '';
+
+            if (selectedDeliveryMode === 'Livraison') {
+                let userAddress = document.getElementById('client-address').value.trim();
+                if (!userAddress) {
+                    alert('Veuillez renseigner votre adresse de livraison svp.');
+                    return;
+                }
+                addressText = `%0A📍 *Adresse de livraison :* ${encodeURIComponent(userAddress)}`;
+            }
+
+            let message = encodeURIComponent(`Bonjour, je souhaite passer commande :`) + `%0A${orderSummary}%0A%0A🚚 *Mode :* ${selectedDeliveryMode}${addressText}`;
             window.location.href = `https://t.me/snnow31?text=${message}`;
         }
     </script>
