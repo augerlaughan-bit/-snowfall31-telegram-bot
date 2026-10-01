@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SNOWFALL31 - Premium Service</title>
+    <title>SNOWFALL31 - Catalogue</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #0b0f17;
-            --card-bg: #131b2e;
-            --border-color: #1f2d4a;
-            --accent-green: #10b981;
-            --accent-blue: #3b82f6;
+            --bg-color: #030712;
+            --card-bg: #0b1329;
+            --border-color: #1e293b;
+            --accent-cyan: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.15);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -28,39 +28,49 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             padding: 16px;
-            padding-bottom: 180px;
+            padding-bottom: 200px;
         }
 
-        /* En-tête Pro */
-        .header {
+        /* Top Bar */
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding-bottom: 12px;
             border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
         }
 
-        .brand h1 {
-            font-size: 1.25rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            color: #fff;
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--accent-cyan);
         }
 
-        .brand span {
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             font-size: 0.75rem;
-            color: var(--accent-green);
+            color: var(--text-muted);
             text-transform: uppercase;
-            font-weight: 600;
             letter-spacing: 1px;
         }
 
-        /* Widget Musique Discret */
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        /* Music Widget */
         .music-widget {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 10px 14px;
             display: flex;
             align-items: center;
@@ -69,97 +79,127 @@
         }
 
         .music-info {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .music-btn {
-            background: rgba(59, 130, 246, 0.15);
-            color: var(--accent-blue);
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            background: var(--accent-glow);
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
             cursor: pointer;
         }
 
-        /* Liste des Produits */
-        .category-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            font-weight: 700;
+        /* Titre Catalogue */
+        .catalog-header {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
+        .catalog-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .catalog-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        /* Carte Produit Style Cyber */
         .product-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 14px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        .product-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
+        .product-img-container {
+            width: 100%;
+            height: 180px;
+            background: #000;
+            position: relative;
+        }
+
+        .product-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+        }
+
+        .product-flag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .product-details {
+            padding: 14px;
         }
 
         .product-name {
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+            color: #fff;
         }
 
-        .product-badge {
-            font-size: 0.7rem;
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--accent-green);
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-weight: 600;
+        .product-origin {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
         }
 
-        /* Sélecteur de grammage */
+        /* Grille des options de poids */
         .options-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 8px;
-            margin-bottom: 12px;
         }
 
         .option-btn {
-            background: #0e1422;
+            background: #050b18;
             border: 1px solid var(--border-color);
             color: var(--text-muted);
             padding: 10px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
             cursor: pointer;
             text-align: center;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
         .option-btn.active {
-            background: rgba(16, 185, 129, 0.15);
-            border-color: var(--accent-green);
-            color: var(--accent-green);
+            background: var(--accent-glow);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
         }
 
-        /* Panier Fixe en Bas */
+        /* Panier Flottant en bas */
         .checkout-dock {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(13, 15, 23, 0.95);
+            background: rgba(3, 7, 18, 0.95);
             backdrop-filter: blur(12px);
             border-top: 1px solid var(--border-color);
             padding: 16px;
@@ -176,7 +216,7 @@
         }
 
         .cart-item-name {
-            color: var(--accent-green);
+            color: var(--accent-cyan);
             font-weight: 700;
         }
 
@@ -193,20 +233,21 @@
         }
 
         .address-input:focus {
-            border-color: var(--accent-blue);
+            border-color: var(--accent-cyan);
         }
 
         .btn-order {
             width: 100%;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #0891b2, #0e7490);
             color: white;
             border: none;
             padding: 14px;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 1rem;
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: 1px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 15px rgba(8, 145, 178, 0.4);
         }
 
         .btn-order:active {
@@ -216,67 +257,81 @@
 </head>
 <body>
 
-    <!-- Audio Player (Remplacez l'URL par votre propre lien de musique si besoin) -->
+    <!-- Audio Player -->
     <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
-    <!-- Header -->
-    <div class="header">
-        <div class="brand">
-            <h1>SNOWFALL31</h1>
-            <span>Service Premium • Toulouse</span>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="logo">SNOWFALL 31</div>
+        <div class="status-badge">
+            <div class="status-dot"></div> En Ligne
         </div>
     </div>
 
     <!-- Widget Musique -->
     <div class="music-widget">
-        <div class="music-info">
-            <span>🎵</span> <span id="music-status">Musique en pause</span>
-        </div>
+        <div class="music-info">🎵 Ambiance Sonore</div>
         <button class="music-btn" id="music-toggle-btn" onclick="toggleMusic()">Activer</button>
     </div>
 
-    <div class="category-title">Menu Exclusif</div>
+    <!-- En-tête Catalogue -->
+    <div class="catalog-header">
+        <div class="catalog-title">CATALOGUE</div>
+        <div class="catalog-subtitle">Sélection Premium • Qualité Garantie</div>
+    </div>
 
     <!-- PRODUIT 1 -->
     <div class="product-card">
-        <div class="product-header">
-            <div class="product-name">Jaune Mousseux</div>
-            <div class="product-badge">HASH 🍯</div>
+        <div class="product-img-container">
+            <!-- Remplacez le lien src par l'image de votre produit -->
+            <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600&auto=format&fit=crop&q=60" alt="Simpson">
+            <div class="product-flag">🇲🇦</div>
         </div>
-        <div class="options-grid">
-            <button class="option-btn" onclick="selectItem('Jaune Mousseux', '1g', '10€', this)">1g — 10€</button>
-            <button class="option-btn" onclick="selectItem('Jaune Mousseux', '5g', '45€', this)">5g — 45€</button>
-            <button class="option-btn" onclick="selectItem('Jaune Mousseux', '10g', '80€', this)">10g — 80€</button>
+        <div class="product-details">
+            <div class="product-name">SIMPSON</div>
+            <div class="product-origin">Maroc</div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="selectItem('Simpson', '100G', '280€', this)">100G — 280€</button>
+                <button class="option-btn" onclick="selectItem('Simpson', '200G', '550€', this)">200G — 550€</button>
+                <button class="option-btn" onclick="selectItem('Simpson', '500G', '1280€', this)">500G — 1280€</button>
+                <button class="option-btn" onclick="selectItem('Simpson', '1KG', '2400€', this)">1KG — 2400€</button>
+            </div>
         </div>
     </div>
 
     <!-- PRODUIT 2 -->
     <div class="product-card">
-        <div class="product-header">
-            <div class="product-name">73U Super Dry</div>
-            <div class="product-badge">HASH 🇨🇦</div>
+        <div class="product-img-container">
+            <!-- Remplacez le lien src par l'image de votre produit -->
+            <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=600&auto=format&fit=crop&q=60" alt="Jaune Mousseux">
+            <div class="product-flag">🍯</div>
         </div>
-        <div class="options-grid">
-            <button class="option-btn" onclick="selectItem('73U Super Dry', '1g', '15€', this)">1g — 15€</button>
-            <button class="option-btn" onclick="selectItem('73U Super Dry', '10g', '130€', this)">10g — 130€</button>
+        <div class="product-details">
+            <div class="product-name">JAUNE MOUSSEUX</div>
+            <div class="product-origin">Sélection Spéciale</div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="selectItem('Jaune Mousseux', '100G', '250€', this)">100G — 250€</button>
+                <button class="option-btn" onclick="selectItem('Jaune Mousseux', '250G', '580€', this)">250G — 580€</button>
+                <button class="option-btn" onclick="selectItem('Jaune Mousseux', '500G', '1100€', this)">500G — 1100€</button>
+                <button class="option-btn" onclick="selectItem('Jaune Mousseux', '1KG', '2100€', this)">1KG — 2100€</button>
+            </div>
         </div>
     </div>
 
-    <!-- PANIER FLOTTANT / COMMANDE -->
+    <!-- PANIER FLOTTANT / VALIDATION -->
     <div class="checkout-dock">
         <div class="cart-summary">
             <span style="color: var(--text-muted);">Sélection :</span>
             <span id="cart-display" class="cart-item-name">Aucun article</span>
         </div>
         <input type="text" id="delivery-address" class="address-input" placeholder="📍 Adresse exacte de livraison...">
-        <button class="btn-order" onclick="sendOrder()">Commander sur Telegram ➔</button>
+        <button class="btn-order" onclick="sendOrder()">COMMANDER SUR TELEGRAM ➔</button>
     </div>
 
     <script>
         // --- GESTION MUSIQUE ---
         const music = document.getElementById('bg-music');
         const musicBtn = document.getElementById('music-toggle-btn');
-        const musicStatus = document.getElementById('music-status');
         let isPlaying = false;
 
         function toggleMusic() {
@@ -285,13 +340,11 @@
                 music.play().then(() => {
                     isPlaying = true;
                     musicBtn.textContent = "Couper";
-                    musicStatus.textContent = "Ambiance active";
                 }).catch(e => console.log(e));
             } else {
                 music.pause();
                 isPlaying = false;
                 musicBtn.textContent = "Activer";
-                musicStatus.textContent = "Musique en pause";
             }
         }
 
@@ -322,11 +375,10 @@
             }
             if (!address) {
                 alert("Veuillez renseigner votre adresse de livraison !");
-                return;
             }
 
-            // Message formaté pour votre bot Snow31_bot
-            const message = `🛍️️ *NOUVELLE COMMANDE*
+            // Message formaté proprement pour votre bot Snow31_bot
+            const message = `🛍 *NOUVELLE COMMANDE*
 ------------------
 • *Produit :* ${currentProduct}
 • *Format :* ${currentWeight} (${currentPrice})
