@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SNOWFALL31 - Catalogue</title>
+    <title>CANDYSHOP 31 - Catalogue</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #030712;
-            --card-bg: #0b1329;
-            --border-color: #1e293b;
-            --accent-cyan: #06b6d4;
-            --accent-glow: rgba(6, 182, 212, 0.15);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --accent-color: #2563eb;
+            --accent-light: #eff6ff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
         }
 
         * {
@@ -28,7 +28,7 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             padding: 16px;
-            padding-bottom: 200px;
+            padding-bottom: 220px;
         }
 
         /* Top Bar */
@@ -36,16 +36,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
             padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .logo {
             font-size: 1.1rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: var(--accent-cyan);
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--text-main);
         }
 
         .status-badge {
@@ -53,42 +53,45 @@
             align-items: center;
             gap: 6px;
             font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #16a34a;
+            font-weight: 600;
+            background: #dcfce7;
+            padding: 4px 10px;
+            border-radius: 20px;
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #10b981;
+            width: 6px;
+            height: 6px;
+            background-color: #16a34a;
             border-radius: 50%;
-            box-shadow: 0 0 8px #10b981;
         }
 
         /* Music Widget */
         .music-widget {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 10px 14px;
+            border-radius: 12px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .music-info {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
+            font-weight: 500;
         }
 
         .music-btn {
-            background: var(--accent-glow);
-            color: var(--accent-cyan);
-            border: 1px solid var(--accent-cyan);
-            padding: 5px 10px;
-            border-radius: 6px;
+            background: var(--accent-light);
+            color: var(--accent-color);
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
             font-size: 0.75rem;
             font-weight: 700;
             cursor: pointer;
@@ -101,33 +104,32 @@
         }
 
         .catalog-title {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 800;
-            letter-spacing: 3px;
-            color: #fff;
+            letter-spacing: 1px;
+            color: var(--text-main);
             margin-bottom: 4px;
         }
 
         .catalog-subtitle {
             font-size: 0.75rem;
             color: var(--text-muted);
-            letter-spacing: 1px;
         }
 
-        /* Carte Produit Style Cyber */
+        /* Carte Produit Clean */
         .product-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
+            border-radius: 16px;
             overflow: hidden;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .product-img-container {
             width: 100%;
-            height: 180px;
-            background: #000;
+            height: 190px;
+            background: #f1f5f9;
             position: relative;
         }
 
@@ -135,35 +137,34 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.9;
         }
 
         .product-flag {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.7);
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.9);
             padding: 4px 8px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 0.9rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .product-details {
-            padding: 14px;
+            padding: 16px;
         }
 
         .product-name {
             font-size: 1.1rem;
             font-weight: 800;
-            letter-spacing: 1px;
+            color: var(--text-main);
             margin-bottom: 2px;
-            color: #fff;
         }
 
         .product-origin {
             font-size: 0.8rem;
             color: var(--text-muted);
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         /* Grille des options de poids */
@@ -174,23 +175,22 @@
         }
 
         .option-btn {
-            background: #050b18;
+            background: #f8fafc;
             border: 1px solid var(--border-color);
-            color: var(--text-muted);
+            color: var(--text-main);
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 0.8rem;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             text-align: center;
             transition: all 0.2s ease;
         }
 
         .option-btn.active {
-            background: var(--accent-glow);
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+            background: var(--accent-light);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
         }
 
         /* Panier Flottant en bas */
@@ -199,12 +199,13 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(3, 7, 18, 0.95);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border-top: 1px solid var(--border-color);
             padding: 16px;
             box-sizing: border-box;
             z-index: 1000;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
         }
 
         .cart-summary {
@@ -216,15 +217,15 @@
         }
 
         .cart-item-name {
-            color: var(--accent-cyan);
+            color: var(--accent-color);
             font-weight: 700;
         }
 
         .address-input {
             width: 100%;
-            background: var(--card-bg);
+            background: #f8fafc;
             border: 1px solid var(--border-color);
-            color: #fff;
+            color: var(--text-main);
             padding: 12px;
             border-radius: 10px;
             font-size: 0.9rem;
@@ -233,21 +234,21 @@
         }
 
         .address-input:focus {
-            border-color: var(--accent-cyan);
+            border-color: var(--accent-color);
+            background: #fff;
         }
 
         .btn-order {
             width: 100%;
-            background: linear-gradient(135deg, #0891b2, #0e7490);
+            background: var(--accent-color);
             color: white;
             border: none;
             padding: 14px;
             border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 800;
-            letter-spacing: 1px;
+            font-size: 0.95rem;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(8, 145, 178, 0.4);
+            box-shadow: 0 4px 12px rgba(37, 99, 235,.2);
         }
 
         .btn-order:active {
@@ -262,9 +263,9 @@
 
     <!-- Top Bar -->
     <div class="top-bar">
-        <div class="logo">SNOWFALL 31</div>
+        <div class="logo">CANDYSHOP 31</div>
         <div class="status-badge">
-            <div class="status-dot"></div> En Ligne
+            <div class="status-dot"></div> EN LIGNE
         </div>
     </div>
 
@@ -283,7 +284,6 @@
     <!-- PRODUIT 1 -->
     <div class="product-card">
         <div class="product-img-container">
-            <!-- Remplacez le lien src par l'image de votre produit -->
             <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600&auto=format&fit=crop&q=60" alt="Simpson">
             <div class="product-flag">🇲🇦</div>
         </div>
@@ -302,7 +302,6 @@
     <!-- PRODUIT 2 -->
     <div class="product-card">
         <div class="product-img-container">
-            <!-- Remplacez le lien src par l'image de votre produit -->
             <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=600&auto=format&fit=crop&q=60" alt="Jaune Mousseux">
             <div class="product-flag">🍯</div>
         </div>
@@ -375,9 +374,9 @@
             }
             if (!address) {
                 alert("Veuillez renseigner votre adresse de livraison !");
+                return;
             }
 
-            // Message formaté proprement pour votre bot Snow31_bot
             const message = `🛍 *NOUVELLE COMMANDE*
 ------------------
 • *Produit :* ${currentProduct}
@@ -385,7 +384,7 @@
 • *Mode :* Livraison 🚚
 • *Adresse :* ${address}`;
 
-            const botUsername = "Snow31_bot"; 
+            const botUsername = "Candyshop31_bot"; // Change le nom du bot si besoin
             const url = `https://t.me/${botUsername}?text=${encodeURIComponent(message)}`;
 
             if (window.Telegram && window.Telegram.WebApp) {
