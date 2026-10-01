@@ -2,170 +2,338 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SNOWFALL31 - Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SNOWFALL31 - Premium Service</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0d1117;
-            color: #ffffff;
-            margin: 0;
-            padding: 15px;
-            padding-bottom: 140px;
+        :root {
+            --bg-color: #0b0f17;
+            --card-bg: #131b2e;
+            --border-color: #1f2d4a;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
         }
-        h1, h2 {
-            font-size: 1.2rem;
-            color: #58a6ff;
-        }
-        .section-box {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        select, input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            background: #21262d;
-            border: 1px solid #30363d;
-            color: #fff;
-            border-radius: 8px;
-            margin-bottom: 10px;
+
+        * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
-        button.btn-add {
-            background: #238636;
-            color: white;
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 16px;
+            padding-bottom: 180px;
+        }
+
+        /* En-tête Pro */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #fff;
+        }
+
+        .brand span {
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Widget Musique Discret */
+        .music-widget {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .music-info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .music-btn {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
             border: none;
-            padding: 10px;
-            width: 100%;
+            padding: 6px 12px;
             border-radius: 8px;
-            font-weight: bold;
+            font-size: 0.8rem;
+            font-weight: 600;
             cursor: pointer;
         }
-        #cart-container {
+
+        /* Liste des Produits */
+        .category-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .product-name {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .product-badge {
+            font-size: 0.7rem;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* Sélecteur de grammage */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .option-btn {
+            background: #0e1422;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .option-btn.active {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        /* Panier Fixe en Bas */
+        .checkout-dock {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: #161b22;
-            border-top: 1px solid #30363d;
-            padding: 15px;
+            background: rgba(13, 15, 23, 0.95);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border-color);
+            padding: 16px;
             box-sizing: border-box;
+            z-index: 1000;
         }
+
+        .cart-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+
+        .cart-item-name {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .address-input {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            outline: none;
+        }
+
+        .address-input:focus {
+            border-color: var(--accent-blue);
+        }
+
         .btn-order {
-            background: #1f6feb;
+            width: 100%;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: white;
             border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 8px;
-            font-weight: bold;
+            padding: 14px;
+            border-radius: 12px;
             font-size: 1rem;
+            font-weight: 700;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-order:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
 
-    <!-- Élément audio unique -->
-    <audio id="bg-music" loop></audio>
+    <!-- Audio Player (Remplacez l'URL par votre propre lien de musique si besoin) -->
+    <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
-    <h1>SNOWFALL31 - Menu</h1>
-
-    <!-- SECTION CHOIX DE LA MUSIQUE -->
-    <div class="section-box">
-        <label for="music-select">🎵 <b>Ambiance sonore :</b></label>
-        <select id="music-select" onchange="changeMusic()">
-            <option value="">-- Couper la musique --</option>
-            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Ambiance Chill Trap</option>
-            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Ambiance Dark / Lofi</option>
-            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Ambiance Rap / Hip-Hop</option>
-        </select>
+    <!-- Header -->
+    <div class="header">
+        <div class="brand">
+            <h1>SNOWFALL31</h1>
+            <span>Service Premium • Toulouse</span>
+        </div>
     </div>
 
+    <!-- Widget Musique -->
+    <div class="music-widget">
+        <div class="music-info">
+            <span>🎵</span> <span id="music-status">Musique en pause</span>
+        </div>
+        <button class="music-btn" id="music-toggle-btn" onclick="toggleMusic()">Activer</button>
+    </div>
+
+    <div class="category-title">Menu Exclusif</div>
+
     <!-- PRODUIT 1 -->
-    <div class="section-box">
-        <h3>Jaune Mousseux (HASH 🍯)</h3>
-        <select id="qty-1">
-            <option value="1g - 10€">1g = 10€</option>
-            <option value="5g - 45€">5g = 45€</option>
-            <option value="10g - 80€">10g = 80€</option>
-        </select>
-        <button class="btn-add" onclick="selectProduct('Jaune Mousseux', 'qty-1')">Sélectionner ce produit</button>
+    <div class="product-card">
+        <div class="product-header">
+            <div class="product-name">Jaune Mousseux</div>
+            <div class="product-badge">HASH 🍯</div>
+        </div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="selectItem('Jaune Mousseux', '1g', '10€', this)">1g — 10€</button>
+            <button class="option-btn" onclick="selectItem('Jaune Mousseux', '5g', '45€', this)">5g — 45€</button>
+            <button class="option-btn" onclick="selectItem('Jaune Mousseux', '10g', '80€', this)">10g — 80€</button>
+        </div>
     </div>
 
     <!-- PRODUIT 2 -->
-    <div class="section-box">
-        <h3>73U Super Dry (HASH 🇨🇦)</h3>
-        <select id="qty-2">
-            <option value="1g - 15€">1g = 15€</option>
-            <option value="10g - 130€">10g = 130€</option>
-        </select>
-        <button class="btn-add" onclick="selectProduct('73U Super Dry', 'qty-2')">Sélectionner ce produit</button>
+    <div class="product-card">
+        <div class="product-header">
+            <div class="product-name">73U Super Dry</div>
+            <div class="product-badge">HASH 🇨🇦</div>
+        </div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="selectItem('73U Super Dry', '1g', '15€', this)">1g — 15€</button>
+            <button class="option-btn" onclick="selectItem('73U Super Dry', '10g', '130€', this)">10g — 130€</button>
+        </div>
     </div>
 
-    <!-- PANIER & VALIDATION -->
-    <div id="cart-container">
-        <p id="current-selection" style="margin: 0 0 10px 0; font-size: 0.9rem; color: #8b949e;">Aucun article sélectionné</p>
-        <input type="text" id="delivery-address" placeholder="Adresse exacte de livraison...">
+    <!-- PANIER FLOTTANT / COMMANDE -->
+    <div class="checkout-dock">
+        <div class="cart-summary">
+            <span style="color: var(--text-muted);">Sélection :</span>
+            <span id="cart-display" class="cart-item-name">Aucun article</span>
+        </div>
+        <input type="text" id="delivery-address" class="address-input" placeholder="📍 Adresse exacte de livraison...">
         <button class="btn-order" onclick="sendOrder()">Commander sur Telegram ➔</button>
     </div>
 
     <script>
-        // --- GESTION DU CHOIX DE LA MUSIQUE ---
-        function changeMusic() {
-            const select = document.getElementById('music-select');
-            const music = document.getElementById('bg-music');
-            const selectedUrl = select.value;
+        // --- GESTION MUSIQUE ---
+        const music = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-toggle-btn');
+        const musicStatus = document.getElementById('music-status');
+        let isPlaying = false;
 
-            if (selectedUrl === "") {
-                music.pause();
-                music.src = "";
-            } else {
-                music.src = selectedUrl;
+        function toggleMusic() {
+            if (!isPlaying) {
                 music.volume = 0.3;
-                music.play().catch(error => {
-                    console.log("Lecture bloquée ou ignorée :", error);
-                });
+                music.play().then(() => {
+                    isPlaying = true;
+                    musicBtn.textContent = "Couper";
+                    musicStatus.textContent = "Ambiance active";
+                }).catch(e => console.log(e));
+            } else {
+                music.pause();
+                isPlaying = false;
+                musicBtn.textContent = "Activer";
+                musicStatus.textContent = "Musique en pause";
             }
         }
 
-        // --- GESTION PANIER ET COMMANDE ---
-        let chosenItem = "";
-        let chosenPrice = "";
+        // --- GESTION PANIER & SÉLECTION ---
+        let currentProduct = "";
+        let currentWeight = "";
+        let currentPrice = "";
 
-        function selectProduct(productName, selectId) {
-            const selectElement = document.getElementById(selectId);
-            chosenItem = productName;
-            chosenPrice = selectElement.value;
+        function selectItem(productName, weight, price, element) {
+            const card = element.closest('.product-card');
+            card.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('active'));
+            
+            element.classList.add('active');
 
-            document.getElementById('current-selection').innerHTML = `✅ <b>${chosenItem}</b> (${chosenPrice})`;
-            document.getElementById('current-selection').style.color = '#3fb950';
+            currentProduct = productName;
+            currentWeight = weight;
+            currentPrice = price;
+
+            document.getElementById('cart-display').textContent = `${currentProduct} (${currentWeight} = ${currentPrice})`;
         }
 
         function sendOrder() {
             const address = document.getElementById('delivery-address').value.trim();
 
-            if (!chosenItem) {
-                alert("Veuillez sélectionner un produit et son grammage !");
+            if (!currentProduct) {
+                alert("Veuillez sélectionner un produit et un format !");
                 return;
             }
             if (!address) {
-                alert("Veuillez indiquer votre adresse de livraison !");
+                alert("Veuillez renseigner votre adresse de livraison !");
                 return;
             }
 
-            const message = `🛍️ *Nouvelle Commande*
+            // Message formaté pour votre bot Snow31_bot
+            const message = `🛍️️ *NOUVELLE COMMANDE*
 ------------------
-• *Produit :* ${chosenItem}
-• *Format :* ${chosenPrice}
+• *Produit :* ${currentProduct}
+• *Format :* ${currentWeight} (${currentPrice})
 • *Mode :* Livraison 🚚
 • *Adresse :* ${address}`;
 
-            const botUsername = "VOTRE_BOT_USERNAME"; // Remplacez par le username de votre bot
+            const botUsername = "Snow31_bot"; 
             const url = `https://t.me/${botUsername}?text=${encodeURIComponent(message)}`;
 
             if (window.Telegram && window.Telegram.WebApp) {
