@@ -32,10 +32,10 @@
         </div>
         <div class="text-center">
             <h1 class="font-bold tracking-wider text-sm">SNOWFALL31</h1>
-            <p class="text-[10px] text-gray-400">mini-application</p>
+            <p class="text-[10px] text-gray-400">service premium • toulouse</p>
         </div>
-        <!-- Bouton Admin pour modifier les tarifs -->
-        <button onclick="toggleAdminModal()" class="w-8 h-8 rounded-full bg-cardBg border border-gray-700 flex items-center justify-center text-gray-300 hover:text-white transition" title="Panneau Admin">
+        <!-- Bouton Paramètres / Admin pour modifier les tarifs et médias -->
+        <button onclick="toggleAdminModal()" class="w-8 h-8 rounded-full bg-cardBg border border-gray-700 flex items-center justify-center text-gray-300 hover:text-white transition shadow-md" title="Panneau Admin">
             <i class="fa-solid fa-gear"></i>
         </button>
     </header>
@@ -62,30 +62,30 @@
             <button onclick="filterCategory('festif')" class="cat-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-cardBg text-gray-300 border border-gray-800 hover:border-gray-700 transition">🥰 Festif</button>
         </div>
 
-        <!-- CONTENEUR DES PRODUITS (Généré dynamiquement) -->
+        <!-- CONTENEUR DES PRODUITS DYNAMIQUES -->
         <div id="dynamic-products-container" class="space-y-6">
-            <!-- Les produits injectés par JavaScript s'afficheront ici par catégorie -->
+            <!-- Généré automatiquement par JavaScript -->
         </div>
 
     </main>
 
-    <!-- MODAL DE GESTION / ADMIN (Pour modifier les tarifs et ajouter des produits) -->
+    <!-- MODAL DU PANNEAU ADMIN (Pour modifier les prix, noms et vidéos) -->
     <div id="admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-cardBg border border-gray-700 rounded-2xl w-full max-w-md p-5 space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-gray-800 pb-3">
-                <h3 class="font-bold text-white text-base"><i class="fa-solid fa-sliders text-blue-500 mr-2"></i>Gestion des Tarifs & Articles</h3>
+                <h3 class="font-bold text-white text-sm"><i class="fa-solid fa-sliders text-blue-500 mr-2"></i>Modifier Tarifs & Médias</h3>
                 <button onclick="toggleAdminModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
             <div class="space-y-3">
-                <p class="text-xs text-gray-400">Modifiez les tarifs ou les descriptions directement ci-dessous :</p>
+                <p class="text-[11px] text-gray-400">Modifiez directement vos articles et ajoutez un lien vidéo (.mp4) :</p>
                 <div id="admin-product-list" class="space-y-3">
-                    <!-- Liste des inputs générés pour chaque produit -->
+                    <!-- Inputs dynamiques -->
                 </div>
             </div>
 
             <div class="border-t border-gray-800 pt-3 flex space-x-2">
-                <button onclick="saveAdminChanges()" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2.5 rounded-xl transition">Enregistrer les modifications</button>
+                <button onclick="saveAdminChanges()" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2.5 rounded-xl transition shadow-lg shadow-blue-600/30">Enregistrer</button>
                 <button onclick="resetDefaultProducts()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs px-3 py-2.5 rounded-xl transition" title="Réinitialiser"><i class="fa-solid fa-rotate-right"></i></button>
             </div>
         </div>
@@ -105,7 +105,7 @@
         </button>
     </div>
 
-    <!-- Barre de Navigation -->
+    <!-- Barre de Navigation avec vos Vrais Liens Telegram -->
     <nav class="fixed bottom-0 left-0 right-0 bg-darkBg/95 backdrop-blur-lg border-t border-gray-800 py-3 px-6 flex justify-around items-center z-50">
         <a href="#" class="flex flex-col items-center text-blue-500">
             <i class="fa-solid fa-house text-lg mb-1"></i>
@@ -125,9 +125,9 @@
         </a>
     </nav>
 
-    <!-- Scripts de Gestion Dynamique et Admin -->
+    <!-- Scripts -->
     <script>
-        // Liste de base par défaut des produits (vous pouvez ajouter l'URL d'une vidéo ou d'une image/média si besoin)
+        // Vos produits initiaux
         const defaultProducts = [
             { id: 1, category: 'hash', badge: 'HASH 🍯', name: 'Jaune Mousseux', subtitle: 'Jaune Mousseux', desc: 'Doux, classique & efficace.', price: 10, media: '' },
             { id: 2, category: 'hash', badge: 'HASH 🇨🇦', name: '73U Super Dry', subtitle: '73U / 120U', desc: 'Filtration haute qualité.', price: 15, media: '' },
@@ -135,17 +135,14 @@
             { id: 4, category: 'festif', badge: 'FESTIF 🥰', name: 'Puff / Vap Pen', subtitle: 'Puff / Vap', desc: 'Prêt à l\'emploi.', price: 40, media: '' }
         ];
 
-        // Charger les produits depuis le localStorage ou utiliser les valeurs par défaut
-        let products = JSON.parse(localStorage.getItem('snow_products')) || defaultProducts;
+        let products = JSON.parse(localStorage.getItem('snow_products_v2')) || defaultProducts;
         let cart = [];
 
-        // Initialisation au chargement
         window.onload = function() {
             renderProducts();
             renderAdminInputs();
         };
 
-        // Afficher les produits sur la page
         function renderProducts() {
             const container = document.getElementById('dynamic-products-container');
             container.innerHTML = '';
@@ -169,8 +166,7 @@
                 `;
 
                 catProducts.forEach(p => {
-                    // Si une URL de vidéo/image est renseignée, on l'affiche, sinon un design propre
-                    let mediaHTML = p.media ? `<div class="mb-2 h-24 rounded-xl overflow-hidden bg-black/40"><video src="${p.media}" autoplay loop muted playsinline class="w-full h-full object-cover"></video></div>` : '';
+                    let mediaHTML = p.media ? `<div class="mb-2 h-28 rounded-xl overflow-hidden bg-black/50 border border-gray-700"><video src="${p.media}" autoplay loop muted playsinline class="w-full h-full object-cover"></video></div>` : '';
 
                     sectionHTML += `
                         <div class="bg-cardBg border border-gray-800/85 rounded-2xl p-3 flex flex-col justify-between relative overflow-hidden group hover:border-blue-500/50 transition duration-300">
@@ -181,9 +177,9 @@
                                 ${mediaHTML}
                                 <span class="text-[10px] text-gray-500 block mb-0.5">${p.subtitle}</span>
                                 <h4 class="font-bold text-sm text-white leading-tight mb-1">${p.name}</h4>
-                                <p class="text-[11px] text-gray-400 line-clamp-2">${p.desc} • <strong>${p.price}€</strong></p>
+                                <p class="text-[11px] text-gray-400 line-clamp-2">${p.desc} • <strong class="text-blue-400">${p.price}€</strong></p>
                             </div>
-                            <button onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})" class="mt-4 w-full bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/45 font-medium text-xs py-2 rounded-xl transition duration-300 flex items-center justify-center space-x-1">
+                            <button onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})" class="mt-4 w-full bg-blue-600/25 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/40 font-medium text-xs py-2 rounded-xl transition duration-300 flex items-center justify-center space-x-1">
                                 <i class="fa-solid fa-cart-plus"></i>
                                 <span>Commander</span>
                             </button>
@@ -196,21 +192,18 @@
             });
         }
 
-        // Gestion du panneau d'administration
         function toggleAdminModal() {
-            const modal = document.getElementById('admin-modal');
-            modal.classList.toggle('hidden');
+            document.getElementById('admin-modal').classList.toggle('hidden');
             renderAdminInputs();
         }
 
-        // Remplir les champs du panneau admin avec les données actuelles
         function renderAdminInputs() {
             const listContainer = document.getElementById('admin-product-list');
             listContainer.innerHTML = '';
 
             products.forEach((p, index) => {
                 listContainer.innerHTML += `
-                    <div class="bg-darkBg/60 border border-gray-800 p-3 rounded-xl space-y-2">
+                    <div class="bg-darkBg/70 border border-gray-800 p-3 rounded-xl space-y-2">
                         <div class="flex justify-between items-center text-xs font-semibold text-gray-300">
                             <span>#${index + 1} - ${p.name}</span>
                             <span class="text-blue-400 uppercase text-[10px]">${p.category}</span>
@@ -219,13 +212,12 @@
                             <input type="text" id="admin-name-${index}" value="${p.name}" class="bg-cardBg border border-gray-700 rounded-lg px-2 py-1 text-xs text-white" placeholder="Nom">
                             <input type="number" id="admin-price-${index}" value="${p.price}" class="bg-cardBg border border-gray-700 rounded-lg px-2 py-1 text-xs text-white" placeholder="Prix (€)">
                         </div>
-                        <input type="text" id="admin-media-${index}" value="${p.media || ''}" class="w-full bg-cardBg border border-gray-700 rounded-lg px-2 py-1 text-[11px] text-gray-300" placeholder="Lien direct vidéo (mp4) ou image optionnel">
+                        <input type="text" id="admin-media-${index}" value="${p.media || ''}" class="w-full bg-cardBg border border-gray-700 rounded-lg px-2 py-1 text-[11px] text-gray-300" placeholder="Lien direct vidéo (.mp4)">
                     </div>
                 `;
             });
         }
 
-        // Sauvegarder les modifications faites dans l'admin
         function saveAdminChanges() {
             products.forEach((p, index) => {
                 const nameInput = document.getElementById(`admin-name-${index}`);
@@ -237,17 +229,15 @@
                 if (mediaInput) p.media = mediaInput.value;
             });
 
-            // Enregistrer dans le stockage local du téléphone / navigateur
-            localStorage.setItem('snow_products', JSON.stringify(products));
+            localStorage.setItem('snow_products_v2', JSON.stringify(products));
             toggleAdminModal();
             renderProducts();
-            alert('Modifications enregistrées avec succès !');
+            alert('Modifications enregistrées !');
         }
 
-        // Réinitialiser par défaut
         function resetDefaultProducts() {
-            if(confirm('Voulez-vous réinitialiser tous les tarifs par défaut ?')) {
-                localStorage.removeItem('snow_products');
+            if(confirm('Réinitialiser les tarifs initiaux ?')) {
+                localStorage.removeItem('snow_products_v2');
                 products = JSON.parse(JSON.stringify(defaultProducts));
                 renderProducts();
                 renderAdminInputs();
@@ -255,7 +245,6 @@
             }
         }
 
-        // Panier & Filtres
         function addToCart(name, price) {
             cart.push({ name, price });
             updateCartUI();
