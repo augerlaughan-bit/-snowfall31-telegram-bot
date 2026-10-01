@@ -1,347 +1,303 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SNOWFALL 31 - Mini App</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        :root {
-            --bg: #090d16;
-            --card-bg: #131b2e;
-            --border: rgba(56, 189, 248, 0.2);
-            --primary: #38bdf8;
-            --gold: #f59e0b;
-            --text: #f8fafc;
-            --muted: #94a3b8;
-            --accent-red: #ef4444;
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNOWFALL 31 - Premium App</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131c2e',
+                        accentBlue: '#3b82f6',
+                    }
+                }
+            }
         }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            padding: 12px;
-            padding-bottom: 90px;
-            min-height: 100vh;
-        }
-
-        /* Top Header avec Logo */
-        .top-header {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 14px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
-        .logo-container {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--gold);
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 30%; /* Centre l'image pour bien voir le logo principal */
-        }
-        .header-title h1 {
-            font-size: 17px;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: 0.5px;
-        }
-        .header-title p {
-            font-size: 11px;
-            color: var(--muted);
-        }
-
-        /* Vues des onglets */
-        .view-section {
-            display: none;
-        }
-        .view-section.active {
-            display: block;
-        }
-
-        /* Grille de produits en 2 colonnes */
-        .products-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .product-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .product-img {
-            width: 100%;
-            height: 110px;
-            background: #1e293b;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--muted);
-            font-size: 11px;
-        }
-        .badge-festive {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(239, 68, 68, 0.85);
-            color: #fff;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 6px;
-            backdrop-filter: blur(4px);
-        }
-        .product-details {
-            padding: 10px;
-        }
-        .product-details h3 {
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 2px;
-            color: var(--text);
-        }
-        .product-details p {
-            font-size: 10px;
-            color: var(--muted);
-            margin-bottom: 8px;
-            line-height: 1.2;
-        }
-        .btn-details {
-            width: 100%;
-            background: linear-gradient(135deg, #38bdf8, #0284c7);
-            color: #000;
-            border: none;
-            padding: 7px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 11px;
-            cursor: pointer;
-        }
-
-        /* Pages Infos / Liens / Contact */
-        .content-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-        .content-card h2 {
-            font-size: 15px;
-            color: var(--gold);
-            margin-bottom: 8px;
-        }
-        .content-card p {
-            font-size: 12px;
-            color: var(--muted);
-            line-height: 1.4;
-            margin-bottom: 6px;
-        }
-
-        /* Barre de Navigation Fixe en Bas (Style iOS) */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(13, 17, 23, 0.95);
-            backdrop-filter: blur(15px);
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 4px;
-            z-index: 1000;
-        }
-        .nav-item {
-            background: none;
-            border: none;
-            color: var(--muted);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            font-size: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            flex: 1;
-            padding: 4px 0;
-            transition: 0.2s;
-        }
-        .nav-item span.icon {
-            font-size: 18px;
-        }
-        .nav-item.active {
-            color: var(--primary);
-        }
-    </style>
+    </script>
+    <!-- FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-darkBg text-gray-100 font-sans antialiased pb-28 selection:bg-blue-500 selection:text-white">
 
-    <!-- Header Supérieur avec ton Logo -->
-    <div class="top-header">
-        <div class="logo-container">
-            <img src="https://i.ibb.co/3mS7y6w/logo.jpg" alt="Logo SNOWFALL31" id="user-logo">
+    <!-- En-tête / Header -->
+    <header class="sticky top-0 z-50 bg-darkBg/80 backdrop-blur-md border-b border-gray-800 px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+            <span class="text-blue-400 font-semibold text-sm cursor-pointer hover:underline">Fermer</span>
         </div>
-        <div class="header-title">
-            <h1>SNOWFALL 31</h1>
-            <p>Service Premium • Toulouse & Alentours</p>
+        <div class="text-center">
+            <h1 class="font-bold tracking-wider text-sm">SNOWFALL31</h1>
+            <p class="text-[10px] text-gray-400">mini-application</p>
         </div>
-    </div>
+        <!-- Bouton Admin pour modifier les tarifs -->
+        <button onclick="toggleAdminModal()" class="w-8 h-8 rounded-full bg-cardBg border border-gray-700 flex items-center justify-center text-gray-300 hover:text-white transition" title="Panneau Admin">
+            <i class="fa-solid fa-gear"></i>
+        </button>
+    </header>
 
-    <!-- ONGLET 1 : MENU / CATALOGUE -->
-    <div id="view-menu" class="view-section active">
-        <div class="products-grid">
-            <div class="product-card">
-                <div class="product-img">
-                    <span class="badge-festive">HASH 🍫</span>
-                    <span>Jaune Mousseux</span>
-                </div>
-                <div class="product-details">
-                    <h3>Jaune Mousseux</h3>
-                    <p>Doux, classique & efficace. 10€/g</p>
-                    <button class="btn-details" onclick="orderItem('Jaune Mousseux', 10)">Commander</button>
+    <!-- Contenu Principal -->
+    <main class="max-w-md mx-auto p-4 space-y-6">
+        
+        <!-- Carte de profil -->
+        <div class="bg-cardBg border border-blue-500/30 rounded-2xl p-4 flex items-center space-x-4 shadow-lg shadow-blue-950/20">
+            <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white font-bold text-lg shadow-inner overflow-hidden border border-blue-400/40">
+                <span class="text-xs">SF 31</span>
+            </div>
+            <div class="flex-1">
+                <h2 class="font-bold text-lg text-white">SNOWFALL 31</h2>
+                <p class="text-xs text-gray-400 mt-0.5">Service Premium • Toulouse & Alentours</p>
+            </div>
+        </div>
+
+        <!-- FILTRE PAR CATÉGORIES -->
+        <div class="flex space-x-2 overflow-x-auto pb-1 scrollbar-none">
+            <button onclick="filterCategory('all')" class="cat-btn active px-4 py-1.5 rounded-full text-xs font-semibold bg-blue-600 text-white shadow-md shadow-blue-600/30 transition">Tout voir</button>
+            <button onclick="filterCategory('hash')" class="cat-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-cardBg text-gray-300 border border-gray-800 hover:border-gray-700 transition">🍯 Hash</button>
+            <button onclick="filterCategory('weed')" class="cat-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-cardBg text-gray-300 border border-gray-800 hover:border-gray-700 transition">🌿 Weed</button>
+            <button onclick="filterCategory('festif')" class="cat-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-cardBg text-gray-300 border border-gray-800 hover:border-gray-700 transition">🥰 Festif</button>
+        </div>
+
+        <!-- CONTENEUR DES PRODUITS (Généré dynamiquement) -->
+        <div id="dynamic-products-container" class="space-y-6">
+            <!-- Les produits injectés par JavaScript s'afficheront ici par catégorie -->
+        </div>
+
+    </main>
+
+    <!-- MODAL DE GESTION / ADMIN (Pour modifier les tarifs et ajouter des produits) -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-cardBg border border-gray-700 rounded-2xl w-full max-w-md p-5 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                <h3 class="font-bold text-white text-base"><i class="fa-solid fa-sliders text-blue-500 mr-2"></i>Gestion des Tarifs & Articles</h3>
+                <button onclick="toggleAdminModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="space-y-3">
+                <p class="text-xs text-gray-400">Modifiez les tarifs ou les descriptions directement ci-dessous :</p>
+                <div id="admin-product-list" class="space-y-3">
+                    <!-- Liste des inputs générés pour chaque produit -->
                 </div>
             </div>
 
-            <div class="product-card">
-                <div class="product-img">
-                    <span class="badge-festive">HASH 🇲🇦</span>
-                    <span>73U / 120U</span>
-                </div>
-                <div class="product-details">
-                    <h3>73U Super Dry</h3>
-                    <p>Filtration haute qualité. 15€/g</p>
-                    <button class="btn-details" onclick="orderItem('73U Super Dry', 15)">Commander</button>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-img">
-                    <span class="badge-festive">WEED 🌿</span>
-                    <span>Amnesia</span>
-                </div>
-                <div class="product-details">
-                    <h3>Amnesia Haze</h3>
-                    <p>Têtes compactes. 12€/g</p>
-                    <button class="btn-details" onclick="orderItem('Amnesia Haze', 12)">Commander</button>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-img">
-                    <span class="badge-festive">FESTIF 🥳</span>
-                    <span>Puff / Vap</span>
-                </div>
-                <div class="product-details">
-                    <h3>Puff / Vap Pen</h3>
-                    <p>Prêt à l'emploi. 40€</p>
-                    <button class="btn-details" onclick="orderItem('Puff / Vap Pen', 40)">Commander</button>
-                </div>
+            <div class="border-t border-gray-800 pt-3 flex space-x-2">
+                <button onclick="saveAdminChanges()" class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2.5 rounded-xl transition">Enregistrer les modifications</button>
+                <button onclick="resetDefaultProducts()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs px-3 py-2.5 rounded-xl transition" title="Réinitialiser"><i class="fa-solid fa-rotate-right"></i></button>
             </div>
         </div>
     </div>
 
-    <!-- ONGLET 2 : INFOS -->
-    <div id="view-infos" class="view-section">
-        <div class="content-card">
-            <h2>ℹ️ Informations & Horaires</h2>
-            <p>🕒 <b>Disponibilité :</b> Ouvert 7j/7 de 10h00 à 03h00 du matin sans interruption.</p>
-            <p>📍 <b>Zone desservie :</b> Toulouse centre et toute la périphérie / alentours.</p>
-            <p>⚡ <b>Service :</b> Livraison ultra rapide, discrète et professionnelle garantie.</p>
+    <!-- Panier Flottant Dynamique -->
+    <div id="cart-bar" class="fixed bottom-20 left-4 right-4 max-w-md mx-auto bg-blue-600 text-white p-3 rounded-2xl shadow-2xl flex items-center justify-between transform translate-y-32 transition-transform duration-300 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm" id="cart-count">0</div>
+            <div>
+                <p class="text-xs font-semibold">Panier en cours</p>
+                <p id="cart-total" class="text-sm font-bold">0.00 €</p>
+            </div>
         </div>
+        <button onclick="checkout()" class="bg-white text-blue-600 px-4 py-1.5 rounded-xl font-bold text-xs shadow hover:bg-gray-100 transition">
+            Valider <i class="fa-solid fa-arrow-right ml-1"></i>
+        </button>
     </div>
 
-    <!-- ONGLET 3 : LIENS -->
-    <div id="view-liens" class="view-section">
-        <div class="content-card">
-            <h2>🔗 Liens Officiels</h2>
-            <p>Restez connectés avec nos canaux officiels pour ne rien rater des arrivages et des promos exclusives.</p>
-            <button class="btn-details" style="margin-top: 10px;" onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/snnow31_bot')">Rejoindre le canal principal</button>
-        </div>
-    </div>
-
-    <!-- ONGLET 4 : CONTACT -->
-    <div id="view-contact" class="view-section">
-        <div class="content-card">
-            <h2>📞 Service Contact & Support</h2>
-            <p>Besoin d'assistance, d'une information sur une commande ou d'un renseignement ?</p>
-            <p>Contactez directement notre opérateur via le bot Telegram ou l'admin dédié.</p>
-            <button class="btn-details" style="margin-top: 10px; background: linear-gradient(135deg, #10b981, #059669); color:#fff;" onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/snnow31_bot')">Ouvrir le chat support</button>
-        </div>
-    </div>
-
-    <!-- Barre de Navigation en Bas -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('menu', this)">
-            <span class="icon">🏠</span>
-            Menu
-        </button>
-        <button class="nav-item" onclick="switchTab('infos', this)">
-            <span class="icon">ℹ️</span>
-            Infos
-        </button>
-        <button class="nav-item" onclick="switchTab('liens', this)">
-            <span class="icon">🔗</span>
-            Liens
-        </button>
-        <button class="nav-item" onclick="switchTab('contact', this)">
-            <span class="icon">✉️️</span>
-            Contact
-        </button>
+    <!-- Barre de Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-darkBg/95 backdrop-blur-lg border-t border-gray-800 py-3 px-6 flex justify-around items-center z-50">
+        <a href="#" class="flex flex-col items-center text-blue-500">
+            <i class="fa-solid fa-house text-lg mb-1"></i>
+            <span class="text-[10px] font-medium">Menu</span>
+        </a>
+        <a href="https://t.me/+Ar5IdGn5wckzYjA0" target="_blank" class="flex flex-col items-center text-gray-400 hover:text-gray-200 transition">
+            <i class="fa-solid fa-circle-info text-lg mb-1"></i>
+            <span class="text-[10px] font-medium">Infos</span>
+        </a>
+        <a href="https://t.me/share/url?url=https%3A%2F%2Ft.me%2Fsnow31_bot&text=Viens%20d%C3%A9couvrir%20ce%20bot%20%F0%9F%91%89" target="_blank" class="flex flex-col items-center text-gray-400 hover:text-gray-200 transition">
+            <i class="fa-solid fa-link text-lg mb-1"></i>
+            <span class="text-[10px] font-medium">Liens</span>
+        </a>
+        <a href="https://t.me/snnow31" target="_blank" class="flex flex-col items-center text-gray-400 hover:text-gray-200 transition">
+            <i class="fa-solid fa-envelope text-lg mb-1"></i>
+            <span class="text-[10px] font-medium">Contact</span>
+        </a>
     </nav>
 
+    <!-- Scripts de Gestion Dynamique et Admin -->
     <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand();
+        // Liste de base par défaut des produits (vous pouvez ajouter l'URL d'une vidéo ou d'une image/média si besoin)
+        const defaultProducts = [
+            { id: 1, category: 'hash', badge: 'HASH 🍯', name: 'Jaune Mousseux', subtitle: 'Jaune Mousseux', desc: 'Doux, classique & efficace.', price: 10, media: '' },
+            { id: 2, category: 'hash', badge: 'HASH 🇨🇦', name: '73U Super Dry', subtitle: '73U / 120U', desc: 'Filtration haute qualité.', price: 15, media: '' },
+            { id: 3, category: 'weed', badge: 'WEED 🌿', name: 'Amnesia Haze', subtitle: 'Amnesia', desc: 'Têtes compactes.', price: 12, media: '' },
+            { id: 4, category: 'festif', badge: 'FESTIF 🥰', name: 'Puff / Vap Pen', subtitle: 'Puff / Vap', desc: 'Prêt à l\'emploi.', price: 40, media: '' }
+        ];
 
-        // Si tu as hébergé ton image ailleurs, remplace le lien ci-dessous par le lien direct de ton image :
-        // document.getElementById('user-logo').src = "TON_LIEN_DIRECT_ICI";
+        // Charger les produits depuis le localStorage ou utiliser les valeurs par défaut
+        let products = JSON.parse(localStorage.getItem('snow_products')) || defaultProducts;
+        let cart = [];
 
-        function switchTab(tabName, element) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('view-' + tabName).classList.add('active');
+        // Initialisation au chargement
+        window.onload = function() {
+            renderProducts();
+            renderAdminInputs();
+        };
 
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
+        // Afficher les produits sur la page
+        function renderProducts() {
+            const container = document.getElementById('dynamic-products-container');
+            container.innerHTML = '';
 
-            tg.HapticFeedback.selectionChanged();
+            const categories = [
+                { key: 'hash', title: 'Catégorie Hash', color: 'border-amber-500 text-amber-400' },
+                { key: 'weed', title: 'Catégorie Weed', color: 'border-emerald-500 text-emerald-400' },
+                { key: 'festif', title: 'Catégorie Festif', color: 'border-purple-500 text-purple-400' }
+            ];
+
+            categories.forEach(cat => {
+                const catProducts = products.filter(p => p.category === cat.key);
+                if (catProducts.length === 0) return;
+
+                let sectionHTML = `
+                    <div class="category-section space-y-3" data-section="${cat.key}">
+                        <div class="flex items-center space-x-2 border-l-2 ${cat.color.split(' ')[0]} pl-2">
+                            <h3 class="font-bold text-sm ${cat.color.split(' ')[1]} uppercase tracking-wider">${cat.title}</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                `;
+
+                catProducts.forEach(p => {
+                    // Si une URL de vidéo/image est renseignée, on l'affiche, sinon un design propre
+                    let mediaHTML = p.media ? `<div class="mb-2 h-24 rounded-xl overflow-hidden bg-black/40"><video src="${p.media}" autoplay loop muted playsinline class="w-full h-full object-cover"></video></div>` : '';
+
+                    sectionHTML += `
+                        <div class="bg-cardBg border border-gray-800/85 rounded-2xl p-3 flex flex-col justify-between relative overflow-hidden group hover:border-blue-500/50 transition duration-300">
+                            <div class="absolute top-2 right-2 bg-blue-500/20 text-blue-300 text-[9px] px-2 py-0.5 rounded-md font-semibold border border-blue-500/30 z-10">
+                                ${p.badge}
+                            </div>
+                            <div>
+                                ${mediaHTML}
+                                <span class="text-[10px] text-gray-500 block mb-0.5">${p.subtitle}</span>
+                                <h4 class="font-bold text-sm text-white leading-tight mb-1">${p.name}</h4>
+                                <p class="text-[11px] text-gray-400 line-clamp-2">${p.desc} • <strong>${p.price}€</strong></p>
+                            </div>
+                            <button onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})" class="mt-4 w-full bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/45 font-medium text-xs py-2 rounded-xl transition duration-300 flex items-center justify-center space-x-1">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Commander</span>
+                            </button>
+                        </div>
+                    `;
+                });
+
+                sectionHTML += `</div></div>`;
+                container.innerHTML += sectionHTML;
+            });
         }
 
-        function orderItem(productName, price) {
-            tg.HapticFeedback.impactOccurred('medium');
-            let data = {
-                action: "order",
-                summary: `Produit sélectionné : ${productName} (${price}€)`
-            };
-            tg.sendData(JSON.stringify(data));
+        // Gestion du panneau d'administration
+        function toggleAdminModal() {
+            const modal = document.getElementById('admin-modal');
+            modal.classList.toggle('hidden');
+            renderAdminInputs();
+        }
+
+        // Remplir les champs du panneau admin avec les données actuelles
+        function renderAdminInputs() {
+            const listContainer = document.getElementById('admin-product-list');
+            listContainer.innerHTML = '';
+
+            products.forEach((p, index) => {
+                listContainer.innerHTML += `
+                    <div class="bg-darkBg/60 border border-gray-800 p-3 rounded-xl space-y-2">
+                        <div class="flex justify-between items-center text-xs font-semibold text-gray-300">
+                            <span>#${index + 1} - ${p.name}</span>
+                            <span class="text-blue-400 uppercase text-[10px]">${p.category}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="admin-name-${index}" value="${p.name}" class="bg-cardBg border border-gray-700 rounded-lg px-2 py-1 text-xs text-white" placeholder="Nom">
+                            <input type="number" id="admin-price-${index}" value="${p.price}" class="bg-cardBg border border-gray-700 rounded-lg px-2 py-1 text-xs text-white" placeholder="Prix (€)">
+                        </div>
+                        <input type="text" id="admin-media-${index}" value="${p.media || ''}" class="w-full bg-cardBg border border-gray-700 rounded-lg px-2 py-1 text-[11px] text-gray-300" placeholder="Lien direct vidéo (mp4) ou image optionnel">
+                    </div>
+                `;
+            });
+        }
+
+        // Sauvegarder les modifications faites dans l'admin
+        function saveAdminChanges() {
+            products.forEach((p, index) => {
+                const nameInput = document.getElementById(`admin-name-${index}`);
+                const priceInput = document.getElementById(`admin-price-${index}`);
+                const mediaInput = document.getElementById(`admin-media-${index}`);
+
+                if (nameInput) p.name = nameInput.value;
+                if (priceInput) p.price = parseFloat(priceInput.value) || 0;
+                if (mediaInput) p.media = mediaInput.value;
+            });
+
+            // Enregistrer dans le stockage local du téléphone / navigateur
+            localStorage.setItem('snow_products', JSON.stringify(products));
+            toggleAdminModal();
+            renderProducts();
+            alert('Modifications enregistrées avec succès !');
+        }
+
+        // Réinitialiser par défaut
+        function resetDefaultProducts() {
+            if(confirm('Voulez-vous réinitialiser tous les tarifs par défaut ?')) {
+                localStorage.removeItem('snow_products');
+                products = JSON.parse(JSON.stringify(defaultProducts));
+                renderProducts();
+                renderAdminInputs();
+                toggleAdminModal();
+            }
+        }
+
+        // Panier & Filtres
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartBar = document.getElementById('cart-bar');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+
+            if (cart.length > 0) {
+                cartBar.classList.remove('translate-y-32');
+                cartCount.innerText = cart.length;
+                let total = cart.reduce((sum, item) => sum + item.price, 0);
+                cartTotal.innerText = total + ' €';
+            } else {
+                cartBar.classList.add('translate-y-32');
+            }
+        }
+
+        function filterCategory(targetCategory) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/30');
+                btn.classList.add('bg-cardBg', 'text-gray-300', 'border', 'border-gray-800');
+            });
+            event.target.classList.remove('bg-cardBg', 'text-gray-300', 'border', 'border-gray-800');
+            event.target.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/30');
+
+            document.querySelectorAll('.category-section').forEach(section => {
+                if (targetCategory === 'all' || section.dataset.section === targetCategory) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
+
+        function checkout() {
+            let orderSummary = cart.map(item => item.name).join(', ');
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+            let message = encodeURIComponent(`Bonjour, je souhaite commander : ${orderSummary} pour un total de ${total}€.`);
+            window.location.href = `https://t.me/snnow31?text=${message}`;
         }
     </script>
 </body>
